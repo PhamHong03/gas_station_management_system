@@ -1,0 +1,123 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+  }
+  /* Bản đồ */
+  #map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: margin-left 0.3s ease-in-out;
+  }
+  /* Khi panel mở, map dịch sang phải 25% */
+  #map.expanded {
+    margin-left: 25%;
+  }
+  /* Ô tìm kiếm */
+  #search-box {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 25px; /* Làm tròn góc */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    width: 350px; /* Điều chỉnh chiều rộng */
+    height: 40px; /* Điều chỉnh chiều cao */
+    z-index: 1000;
+}
+
+#search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    border-radius: 25px; /* Bo tròn input */
+}
+
+#search-btn {
+    border: none;
+    color: white;
+    padding: 10px 15px;
+    margin-left: 10px;
+    font-size: 18px;
+    border-radius: 50%; /* Làm nút tròn */
+    cursor: pointer;
+   
+}
+
+#search-btn:hover {
+    background: #0056b3;
+}
+
+  /* Panel thông tin bên trái */
+  #info-panel {
+    width: 25%;
+    height: 100vh;
+    background: white;
+    border-right: 1px solid #ccc;
+    padding: 20px;
+    overflow-y: auto;
+    position: fixed;
+    left: -50%; /* Ẩn panel đi */
+    top: 0;
+    z-index: 1000;
+    transition: left 0.3s ease-in-out;
+  }
+  #info-content img {
+    width: 400px;
+    max-height: 200px; 
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+    margin: 10px 0;
+  }
+  
+  /* Khi panel mở */
+  #info-panel.show {
+    left: 0;
+  }
+
+  /* Tab container */
+#tab-container {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #ccc;
+    margin-bottom: 10px;
+}
+.tab-btn {
+    flex: 1;
+    padding: 10px;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+}
+.tab-btn.active {
+    background: #007bff;
+    color: white;
+}
+
+/* Tab content */
+.tab-panel {
+    display: none;
+}
+.tab-panel.active {
+    display: block;
+}
+
+/* Image styling */
+#place-image {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}

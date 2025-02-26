@@ -1,116 +1,193 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>Page Title</title>
-        <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
-
-		<!-- Import Leaflet CSS -->
-		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-		<!-- Import Leaflet JS -->
-		<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-	</head>
-	<body>
-		<div id="left">Left content</div>
-		<div id="map"></div>
-		<div id="right">Right content</div>
-
-		<script>
-            // Thiết lập thông số cho bản đồ
-            var mapOptions = {
-                center: [10.026667, 105.783333],
-                zoom: 15
-            };
-            // Khai báo đối tượng bản đồ
-            var map = new L.map('map', mapOptions);
-            // Khai báo lớp bản đồ
-            var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-            // Thêm mới lớp bản đồ vào bản đồ
-            map.addLayer(layer);
+<head>
+  <meta charset="UTF-8">
+  <title>Map with Info Panel</title>
+  
+  <!-- Import Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  
+  <!-- Import Leaflet Geocoder CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+  <link href="{{ asset('frontend/css/map.css') }}" rel="stylesheet" type="text/css">
+  
+</head>
+<body>
+  <!-- Map Container -->
+  <div id="map">
+    <div id="search-box">
+      <input type="text" id="search-input" placeholder="Nhập địa chỉ...">
+      <button id="search-btn">🔍</button>
+    </div>
+  </div>
+  
+  <!-- Panel Thông tin bên trái -->
+  <div id="info-panel">
+    <button id="close-btn">❌</button>
+    <h2>Thông Tin Địa Điểm</h2>
+    <div id="info-content">
+      <p>Chọn một địa điểm trên bản đồ để xem chi tiết.</p>
+    </div>
+  </div>
+  
+  <!-- Import Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <!-- Import Leaflet Geocoder JS -->
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  
+  <script>
+    var mapOptions = {
+      center: [10.026667, 105.783333],
+      zoom: 15
+    };
+    var map = new L.map('map', mapOptions);
+    var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    map.addLayer(layer);
     
-            // Tạo lớp đánh dấu
-            var marker = L.marker([ 10.0299890, 105.7707527]);
+    var geocoder = L.Control.Geocoder.nominatim();
+    var control = L.Control.geocoder({
+      geocoder: geocoder,
+      defaultMarkGeocode: true
+    }).addTo(map);
     
-            // Tạo icon đánh dấu mới với logo Đại học Cần Thơ
-            var icon = L.icon({
-                iconUrl: 'https://upload.wikimedia.org/wikipedia/vi/6/6c/Logo_Dai_hoc_Can_Tho.svg', // Đường dẫn đến logo Đại học Cần Thơ
+    control.on("markgeocode", function(e) {
+        var center = e.geocode.center; // Lấy tọa độ vị trí tìm kiếm được
+        L.marker(center).addTo(map) // Thêm marker vào vị trí vừa tìm thấy
+            .bindPopup(e.geocode.name) // Hiển thị tên địa điểm trong popup
+            .openPopup();
+        map.setView(center, 15); // Di chuyển bản đồ đến vị trí đó
+        });
+
+
+    // Tạo icon mặc định cho cây xăng
+    var gasStationIcon = L.icon({
+        iconUrl: 'resources/gas-station.png', // Đường dẫn đến ảnh
+        iconSize: [20, 20], // Kích thước icon (chiều rộng, chiều cao)
+        iconAnchor: [20, 40], // Điểm neo của icon (nằm dưới cùng ở giữa)
+        popupAnchor: [0, -40] // Điểm neo của popup
+    });
+
+
+    var locations = [
+      { 
+          id: 1,
+          name: "Cửa hàng Xăng dầu Petrolimex Số 05",
+          address: "24 Nguyễn Trãi, Thới Bình, Ninh Kiều, Cần Thơ, Việt Nam",
+          phone: "02923821675",
+          coords: [10.04501, 105.78088],
+          image: "https://lh5.googleusercontent.com/p/AF1QipOpl3G1h8M124D8daxNjqPfGCtDrVSpEEMj7Jyi=w408-h544-k-no",
+          rating: 4.0,
+          openHours: "06:00 - 22:00",
+          reviews: [
+          { name: "Nguyễn Văn A", rating: 5, comment: "Dịch vụ tốt, nhân viên thân thiện!" },
+          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." },
+          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." }
+            ]
+      },
+      { 
+          id: 2,
+          name: "Khu II - Đường 3/2",
+          coords: [10.038072, 105.769839],
+          image: "https://upload.wikimedia.org/wikipedia/commons/2/2d/CTU_Main.jpg",
+          rating: 4.2,
+          openHours: "07:00 - 20:00",
+          reviews: [
+          { name: "Nguyễn Văn A", rating: 5, comment: "Dịch vụ tốt, nhân viên thân thiện!" },
+          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." },
+          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." }
+      ]
+      }
+    ];
+    
+    function getStarRating(rating) {
+      var fullStar = '⭐';
+      var stars = "";
+      for (var i = 1; i <= 5; i++) {
+          stars += i <= Math.floor(rating) ? fullStar : "☆";
+      }
+      return stars;
+    }
+
+    function showInfoPanel() {
+      document.getElementById("info-panel").classList.add("show");
+      document.getElementById("map").classList.add("expanded");
+    }
+    function hideInfoPanel() {
+      document.getElementById("info-panel").classList.remove("show");
+      document.getElementById("map").classList.remove("expanded");
+    }
+
+    var icon = L.icon({
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/6686/6686706.png', // Đường dẫn đến logo Đại học Cần Thơ
                 iconSize: [40, 40], // Kích thước của logo
                 iconAnchor: [20, 40], // Vị trí của logo
                 popupAnchor: [1, -34] // Vị trí của popup
             });
-    
-            // Thay thế icon đánh dấu mặc định
+
+    locations.forEach(function(location) {
+      var marker = L.marker(location.coords).addTo(map);
+            
             marker.setIcon(icon);
-    
-            // Thêm lớp đánh dấu vào bản đồ
             marker.addTo(map);
+      // ❌ Popup KHÔNG chứa hình ảnh
+      var popupContent = `
+        <div data-location-id="${location.id}">
+          <h3 style="margin: 5px 0;">${location.name}</h3>
+          <p style="margin: 5px 0; font-size: 16px;">Đánh giá: ${getStarRating(location.rating)} (${location.rating}/5)</p>
+          <p style="margin: 5px 0; font-size: 14px;">⏰ Giờ mở cửa: <b>${location.openHours}</b></p>
+        </div>
+      `;
+      marker.bindPopup(popupContent);
+      
+      marker.on("mouseover", function() { 
+        this.openPopup();
+      });
+      marker.on("mouseout", function() { 
+        this.closePopup();
+      });
+      
+      // ✅ Panel bên trái sẽ HIỂN THỊ hình ảnh
+      marker.on("click", function() {
+        document.getElementById("info-content").innerHTML = `
+            <div data-location-id="${location.id}">
+            <img src="${location.image}" alt="${location.name}" style="max-width:100%; height:auto; display:block; margin:0 auto;">
+            <h3>${location.name}</h3>
+            <p><strong>Đánh giá:</strong> ${getStarRating(location.rating)} (${location.rating}/5)</p>
+        
+            <div id="tab-content">
+                <!-- Tab 1: Tổng Quan -->
+                <div class="tab-panel active" id="overview">
+                    <p><strong>📍 Địa chỉ:</strong> ${location.address}<span id="place-address"></span></p>
+                    <p><strong>⏰ Giờ hoạt động:</strong> ${location.openHours} <span id="place-hours"></span></p>
+                    <p><strong>📞 Điện thoại:</strong> ${location.phone}<span id="place-phone"></span></p>
+                </div>
+                <hr>
 
-            // // Cài đặt thuộc tính cho lớp đánh dấu
-            // // marker.bindPopup("Đại học Cần Thơ");
-            // marker.bindPopup(`
-            // <h2> Khu II Đại học Cần Thơ</h2>
-            // <p>Địa chỉ: Khu II, đường 3/2, phường Xuân Khánh, quận Ninh Kiều, thành phố Cần Thơ</p>
-            // <p>Mô tả: Đại học Cần Thơ là một trường đại học công lập tại thành phố Cần Thơ, Việt Nam. Trường được thành lập vào năm 1966 và hiện là một trong những trường đại học lớn nhất tại khu vực Đồng bằng sông Cửu Long.</p>
-            // <img src="logo.png" width="300" height="200">
-            // `);
+                <!-- Bài Đánh Giá -->
+                <div id="reviews">
+                    <h3>📢 Bài Đánh Giá</h3>
+                    <div id="review-list">
+                    ${location.reviews.length > 0 
+                        ? location.reviews.map(review => `
+                            <div class="review-item">
+                                <p><strong>${review.name}</strong> - ${getStarRating(review.rating)}</p>
+                                <p>💬 ${review.comment}</p>
+                            </div>
+                        `).join('')
+                        : "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>"
+                    }
+                    </div>
+                </div>
+            </div>
 
-            // Mảng chứa vị trí của 4 khu
-            var locations = [
-                { name: "Khu I - Đường 30/4", coords: [10.029338, 105.768499] },
-                { name: "Khu II - Đường 3/2", coords: [10.038072, 105.769839] },
-                { name: "Khu III - Đường Lý Tự Trọng", coords: [10.032110, 105.778589] },
-                { name: "Khu Hòa An - Hậu Giang", coords: [9.985250, 105.642550] }
-            ];
+          </div>
+        `;
+        showInfoPanel();
+      });
+    });
 
-            // Vòng lặp để thêm các marker tương ứng
-            locations.forEach(function(location) {
-                var marker = L.marker(location.coords).addTo(map);
-                marker.bindPopup(location.name); // Hiển thị tên khu khi click vào marker
-            });
+    document.getElementById("close-btn").addEventListener("click", hideInfoPanel);
 
-            // Kiểm tra trình duyệt có hỗ trợ Geolocation API không
-            // if (navigator.geolocation) {
-            //     navigator.geolocation.getCurrentPosition(function(position) {
-            //         var latitude = position.coords.latitude;
-            //         var longitude = position.coords.longitude;
-
-            //         // Thêm marker vào vị trí hiện tại
-            //         var userMarker = L.marker([latitude, longitude]).addTo(map);
-
-            //         // Di chuyển bản đồ tới vị trí hiện tại
-            //         map.setView([latitude, longitude], 15);
-
-            //         // Popup thông báo vị trí
-            //         userMarker.bindPopup("You are here: " + latitude + ", " + longitude).openPopup();
-            //     }, function(error) {
-            //         console.error("Geolocation error: " + error.message);
-            //     });
-            // } else {
-            //     alert("Trình duyệt của bạn không hỗ trợ Geolocation API.");
-            // }
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-                maxZoom: 19,
-                attribution: "© OpenStreetMap contributors"
-            }).addTo(map);
-
-            // Tích hợp Leaflet Control Geocoder
-            var geocoder = L.Control.Geocoder.nominatim(); // Sử dụng dịch vụ Nominatim của OpenStreetMap
-            var control = L.Control.geocoder({
-                geocoder: geocoder,
-                defaultMarkGeocode: true // Tự động đánh dấu vị trí trên bản đồ
-            }).addTo(map);
-
-            // Lắng nghe sự kiện khi tìm kiếm
-            control.on("markgeocode", function (e) {
-                var center = e.geocode.center; // Tọa độ được trả về
-                L.marker(center).addTo(map) // Thêm marker tại vị trí
-                    .bindPopup(e.geocode.name) // Thông báo tên địa điểm
-                    .openPopup();
-                map.setView(center, 15); // Di chuyển bản đồ tới vị trí
-            });
-
-    </script>
+  </script>
 </body>
 </html>
-
-        
-
-        
