@@ -8,6 +8,6 @@ use Illuminate\Http\Request;
 class MapController extends Controller
 {
     public function index(){
-        return view('maps.index');
+        return view('clients.layouts.homepage');
     }
 }
