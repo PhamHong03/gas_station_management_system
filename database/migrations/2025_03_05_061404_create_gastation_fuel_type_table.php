@@ -11,15 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('gastation_fuel_type', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('CCCD', 15)->unique();
-            $table->string('email')->unique();
-            $table->string('password');
-            $table->string('role')->default("user");
-            $table->boolean('active');
-            $table->rememberToken();
+            $table->unsignedInteger('gastation_id');
+            $table->unsignedInteger('fuel_type_id');
             $table->timestamps();
         });
     }
@@ -29,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('gastation_fuel_type');
     }
 };
