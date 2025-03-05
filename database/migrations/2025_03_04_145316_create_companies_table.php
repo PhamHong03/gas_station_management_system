@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('phone', 15);
             $table->decimal('longitude', 10, 7);
             $table->decimal('latitude', 10, 7);
-            $table->unsignedInteger('manager_id');
-            $table->unsignedInteger('ward_id');
+            $table->unsignedInteger('ManagerId');
+            $table->unsignedInteger('WardId');
             $table->timestamps();
         });
     }
