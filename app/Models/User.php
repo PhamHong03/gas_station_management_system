@@ -20,5 +20,11 @@ class User extends Authenticatable
     public function review() {
         return $this->hasMany(Review::class, 'UserId', 'id');
     }
+    public function company() {
+        return $this->hasMany(Company::class, 'UserId', 'id');
+    }
+    public function manager() {
+        return $this->hasOne(Manager::class, 'UserId', 'id');
+    }
 
 }

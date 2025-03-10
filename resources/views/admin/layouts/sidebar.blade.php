@@ -25,6 +25,24 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ui-company" aria-expanded="false"
+                        aria-controls="ui-company">
+                        <span class="menu-title">Công ty Đầu mối</span>
+                        <i class="menu-arrow"></i>
+                        <i class="fa fa-building-o"></i>
+                    </a>
+                    <div class="collapse" id="ui-company">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.companies.create') }}">Thêm Công ty</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.companies.list') }}">Danh sách Công Ty</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
             </ul>
 
