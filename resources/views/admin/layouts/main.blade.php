@@ -6,7 +6,7 @@
       @include('admin.layouts.nav')
       <div class="container-fluid page-body-wrapper">
         @include('admin.layouts.sidebar')
-
+        @include('admin.layouts.alert')
         @yield('content')
 
       </div>

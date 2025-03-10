@@ -70,17 +70,17 @@
                     <label for="email">Email</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email">
 
-                        @error('email')
-                        <div class="ms-5 text-danger">{{$message}}</div>
+                    @error('email')
+                        <div class="ms-5 text-danger">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="form-group">
                     <label for="password">Mật khẩu</label>
                     <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Nhập mật khẩu" >
-                        @error('password')
-                        <div class="ms-5 text-danger">{{$message}}</div>
+                        placeholder="Nhập mật khẩu">
+                    @error('password')
+                        <div class="ms-5 text-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <button type="submit" class="btn btn-dark w-100">Đăng nhập</button>
