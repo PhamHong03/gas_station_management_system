@@ -61,6 +61,27 @@
                         </ul>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ui-price" aria-expanded="false"
+                        aria-controls="ui-price">
+                        <span class="menu-title">Giá Nhiên Liệu ở Công ty</span>
+                        <i class="menu-arrow"></i>
+                        <i class="fa fa-fire"></i>
+                    </a>
+                    <div class="collapse" id="ui-price">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.fuel-prices.create') }}">Thêm Giá Nhiên Liệu ở
+                                    Công ty</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.fuel-prices.list') }}">Danh sách Giá Nhiên
+                                    Liệu
+                                    ở Công ty</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
             </ul>
 

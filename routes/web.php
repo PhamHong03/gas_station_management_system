@@ -2,12 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\Admin\FuelTypeController;
+use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\Maps\MapController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\CompanyController;
+use App\Http\Controllers\Admin\FuelTypeController;
 
 Route::get('/get-districts/{cityId}', [LocationController::class, 'getDistricts']);
 Route::get('/get-wards/{districtId}', [LocationController::class, 'getWards']);
@@ -43,5 +44,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.check']], function ()
     Route::get('/fuel-types/edit/{id}', [FuelTypeController::class, 'edit'])->name('admin.fuel-types.edit');
     Route::post('/fuel-types/edit/{id}', [FuelTypeController::class, 'update'])->name('admin.fuel-types.update');
     Route::get('/fuel-types/delete/{id}', [FuelTypeController::class, 'delete'])->name('admin.fuel-types.delete');
-    // Fuel Prices
+    // Fuel Prices\
+    Route::get('/fuel-prices/list', [PriceController::class, 'list'])->name('admin.fuel-prices.list');
+    Route::get('/fuel-prices/create', [PriceController::class, 'create'])->name('admin.fuel-prices.create');
+    Route::post('/fuel-prices/create', [PriceController::class, 'store'])->name('admin.fuel-prices.store');
+    Route::get('/fuel-prices/edit/{id}', [PriceController::class, 'edit'])->name('admin.fuel-prices.edit');
+    Route::post('/fuel-prices/edit/{id}', [PriceController::class, 'update'])->name('admin.fuel-prices.update');
+    Route::get('/fuel-prices/delete/{id}', [PriceController::class, 'delete'])->name('admin.fuel-prices.delete');
 });
