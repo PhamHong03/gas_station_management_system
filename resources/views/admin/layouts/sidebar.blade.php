@@ -82,8 +82,25 @@
                         </ul>
                     </div>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="collapse" href="#ui-gasStation" aria-expanded="false"
+                        aria-controls="ui-gasStation">
+                        <span class="menu-title">Cây xăng</span>
+                        <i class="menu-arrow"></i>
+                        <i class="fa fa-fire"></i>
+                    </a>
+                    <div class="collapse" id="ui-gasStation">
+                        <ul class="nav flex-column sub-menu">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.gas-stations.create') }}">Thêm Cây xăng</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.gas-stations.list') }}">Danh sách Cây
+                                    xăng</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
             </ul>
-
         </nav>
         <!-- partial -->
