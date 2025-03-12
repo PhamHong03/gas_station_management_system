@@ -19,7 +19,7 @@ class GasStationService
     $gasStation->operation_time = $request->operation_time;
     $gasStation->CompanyId = $request->CompanyId;
     $gasStation->WardId = $request->WardId;
-
+    //Hướng dẫn xữ lý ảnh upload
     // Kiểm tra xem có file ảnh được tải lên không
     if ($request->hasFile('image')) {
         // Kiểm tra định dạng file
@@ -56,7 +56,7 @@ class GasStationService
         $gasStation->operation_time = $request->operation_time;
         $gasStation->CompanyId = $request->CompanyId;
         $gasStation->WardId = $request->WardId;
-
+        //Hướng dẫn xữ lý ảnh upload
         // Kiểm tra xem có file ảnh được tải lên không
         if ($request->hasFile('image')) {
             // Kiểm tra định dạng file

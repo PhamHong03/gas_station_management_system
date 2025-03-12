@@ -10,7 +10,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a
-                                href="{{ route('admin.gas-station-fuel.list', ['id' => $gasStation->id]) }}">{{ $gasStation->name }}</a>
+                                href="{{ route('admin.gas-station-fuel.list') }}">{{ $gasStation->name }}</a>
                         </li>
                         <li class="breadcrumb-item active" aria-current="page">Sửa Nhiên Liệu Kinh Doanh cho
                             {{ $gasStation->name }}</li>
@@ -25,21 +25,18 @@
                                 {{ $gasStation->name }}</h4>
                             <form class="forms-sample" action="" method="post">
                                 @csrf
-                                <input type="hidden" name="GasStationId" value="{{ $gasStationFuel->GasStationId }}">
+                                <input type="hidden" name="gas_station_id" value="{{ $gasStation->id }}">
                                 <div class="form-group">
                                     <label for="citySelect">Chọn nhiên liệu cho cây xăng</label>
-                                    <select class="form-select" name="FuelTypeId">
+                                    <select class="form-select" id="citySelect">
                                         <option value="{{ $gasStationFuel->FuelTypeId }}">
                                             {{ $gasStationFuel->fuelType->name }}</option>
-                                        @foreach ($fuelTypes as $fuelType)
+                                        @foreach ($fuelType as $fuelType)
                                             <option value="{{ $fuelType->id }}">{{ $fuelType->name }}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                                @error('FuelTypeId')
-                                    <div class="ms-5 text-danger">{{ $message }}</div>
-                                @enderror
-                                <button type="submit" class="btn btn-gradient-primary me-2">Sửa</button>
+                                <button type="submit" class="btn btn-gradient-primary me-2">Tạo</button>
                             </form>
                         </div>
                     </div>

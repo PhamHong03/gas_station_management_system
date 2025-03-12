@@ -54,8 +54,11 @@
                                                 <td>
                                                     <a href="{{ route('admin.gas-stations.edit', ['id' => $gasStation->id]) }}"
                                                         class="btn btn-primary">Sửa</a>
+                                                    <a href="{{ route('admin.gas-station-fuel.list', ['id' => $gasStation->id]) }}"
+                                                        class="btn btn-info">Xem nguyên liệu</a>
                                                     <a href="{{ route('admin.gas-stations.delete', ['id' => $gasStation->id]) }}"
                                                         class="btn btn-danger">Xóa</a>
+
                                                 </td>
                                             </tr>
                                         @endforeach

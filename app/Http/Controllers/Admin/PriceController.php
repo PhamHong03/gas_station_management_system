@@ -23,8 +23,8 @@ class PriceController extends Controller
     }
     public function create()
     {
-        $fuelTypes = FuelType::all();
         $companies = Company::all();
+        $fuelTypes = FuelType::all();
         return view('admin.price.create', compact('fuelTypes', 'companies'));
     }
     public function store(AddPriceRequest $request)

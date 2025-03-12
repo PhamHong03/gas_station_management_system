@@ -61,9 +61,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.check']], function ()
     Route::post('/gas-stations/edit/{id}', [GasStationController::class, 'update'])->name('admin.gas-stations.update');
     Route::get('/gas-stations/delete/{id}', [GasStationController::class, 'delete'])->name('admin.gas-stations.delete');
     // Gas Station Fuel
-    Route::get('/gas-station-fuel/list', [GasStationFuelController::class, 'list'])->name('admin.gas-station-fuel.list');
-    Route::get('/gas-station-fuel/create', [GasStationFuelController::class, 'create'])->name('admin.gas-station-fuel.create');
-    Route::post('/gas-station-fuel/create', [GasStationFuelController::class, 'store'])->name('admin.gas-station-fuel.store');
+    Route::get('/gas-station-fuel/list/{id}', [GasStationFuelController::class, 'list'])->name('admin.gas-station-fuel.list');
+    Route::get('/gas-station-fuel/create/{id}', [GasStationFuelController::class, 'create'])->name('admin.gas-station-fuel.create');
+    Route::post('/gas-station-fuel/create/{id}', [GasStationFuelController::class, 'store'])->name('admin.gas-station-fuel.store');
     Route::get('/gas-station-fuel/edit/{id}', [GasStationFuelController::class, 'edit'])->name('admin.gas-station-fuel.edit');
     Route::post('/gas-station-fuel/edit/{id}', [GasStationFuelController::class,'update'])->name('admin.gas-station-fuel.update');
     Route::get('/gas-station-fuel/delete/{id}', [GasStationFuelController::class, 'delete'])->name('admin.gas-station-fuel.delete');
