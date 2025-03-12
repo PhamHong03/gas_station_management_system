@@ -32,7 +32,7 @@ class PriceController extends Controller{
         if ($this->priceAdService->addPrice($request)) {
             return redirect()->route('company.fuel-prices.list');
         }
-        return redirect()->back()->with('message', 'Đã thêm thành công');
+        return redirect()->back()->with('success', 'Đã thêm thành công');
     }
     public function edit($id)
     {

@@ -28,7 +28,7 @@ class GasStationController extends Controller
     }
     public function store(AddGasStationRequest $request){
         $this->gasStationServer->addGasStation($request);
-        return redirect()->route('admin.gas-stations.list')->with('susses', 'Thêm cây xăng thành công');
+        return redirect()->route('admin.gas-stations.list')->with('success', 'Thêm cây xăng thành công');
     }
     public function edit($id){
         $gasStation = GasStation::find($id);
@@ -41,10 +41,10 @@ class GasStationController extends Controller
     }
     public function update(AddGasStationRequest $request, $id){
         $this->gasStationServer->update($request, $id);
-        return redirect()->route('admin.gas-stations.list')->with('susses', 'Cập nhật cây xăng thành công');
+        return redirect()->route('admin.gas-stations.list')->with('success', 'Cập nhật cây xăng thành công');
     }
     public function delete($id){
         $this->gasStationServer->delete($id);
-        return redirect()->route('admin.gas-stations.list')->with('susses', 'Xóa thành công');
+        return redirect()->route('admin.gas-stations.list')->with('success', 'Xóa thành công');
     }
 }

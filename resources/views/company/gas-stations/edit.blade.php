@@ -1,4 +1,4 @@
-@extends('admin.layouts.main')
+@extends('company.layouts.main')
 @section('title', 'Sửa Cây xăng')
 @section('content')
     <div class="main-panel">
@@ -7,7 +7,7 @@
                 <h3 class="page-title"> Sửa Cây xăng</h3>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.gas-stations.list') }}">Cây xăng</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('company.gas-stations.list') }}">Cây xăng</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Sửa Cây xăng</li>
                     </ol>
                 </nav>
@@ -94,13 +94,11 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputName1">Công Ty Đầu mối</label>
-                                    <select name="CompanyId" class="form-select" id="">
-                                        <option value="{{ $gasStation->company->name }}">Chọn Công Ty</option>
-                                        @foreach ($companies as $company)
-                                            <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="exampleInputName1">Công ty Đầu mối</label>
+                                    <input type="text" class="form-control" id="exampleInputName1"
+                                        placeholder="CompanyId" value="{{ $company->name }}" readonly>
+                                    <input type="hidden" class="form-control" name="CompanyId" id="exampleInputName1"
+                                        placeholder="CompanyId" value="{{ $company->id }}" readonly>
                                     @error('CompanyId')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror

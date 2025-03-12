@@ -94,13 +94,11 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <labelfor="exampleInputName1">Công Ty Đầu mối</labelfor=>
-                                    <select name="CompanyId" class="form-select" id="">
-                                        <option value="">Chọn Công Ty</option>
-                                        @foreach ($companies as $company)
-                                            <option value="{{ $company->id }}">{{ $company->name }}</option>
-                                        @endforeach
-                                    </select>
+                                    <label for="exampleInputName1">Công ty Đầu mối</label>
+                                    <input type="text" class="form-control" id="exampleInputName1"
+                                        placeholder="CompanyId" value="{{ $company->name }}" readonly>
+                                    <input type="hidden" class="form-control" name="CompanyId" id="exampleInputName1"
+                                        placeholder="CompanyId" value="{{ $company->id }}" readonly>
                                     @error('CompanyId')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror
