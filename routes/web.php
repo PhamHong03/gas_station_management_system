@@ -10,7 +10,11 @@ use App\Http\Controllers\Admin\PriceController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\FuelTypeController;
 use App\Http\Controllers\Admin\GasStationController;
+use App\Http\Controllers\Company\GasStationController as CompanyGasStationController;
 use App\Http\Controllers\Admin\GasStationFuelController;
+use App\Http\Controllers\Company\GasStationFuelController as CompanyGasStationFuelController;
+use App\Http\Controllers\Company\PriceController as CpnPriceController;
+use App\Http\Controllers\Company\CompanyController as CompanyCompanyController;
 
 Route::get('/get-districts/{cityId}', [LocationController::class, 'getDistricts']);
 Route::get('/get-wards/{districtId}', [LocationController::class, 'getWards']);
@@ -46,7 +50,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.check']], function ()
     Route::get('/fuel-types/edit/{id}', [FuelTypeController::class, 'edit'])->name('admin.fuel-types.edit');
     Route::post('/fuel-types/edit/{id}', [FuelTypeController::class, 'update'])->name('admin.fuel-types.update');
     Route::get('/fuel-types/delete/{id}', [FuelTypeController::class, 'delete'])->name('admin.fuel-types.delete');
-    // Fuel Prices\
+    // Fuel Prices
     Route::get('/fuel-prices/list', [PriceController::class, 'list'])->name('admin.fuel-prices.list');
     Route::get('/fuel-prices/create', [PriceController::class, 'create'])->name('admin.fuel-prices.create');
     Route::post('/fuel-prices/create', [PriceController::class, 'store'])->name('admin.fuel-prices.store');
@@ -67,5 +71,31 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin.check']], function ()
     Route::get('/gas-station-fuel/edit/{id}', [GasStationFuelController::class, 'edit'])->name('admin.gas-station-fuel.edit');
     Route::post('/gas-station-fuel/edit/{id}', [GasStationFuelController::class,'update'])->name('admin.gas-station-fuel.update');
     Route::get('/gas-station-fuel/delete/{id}', [GasStationFuelController::class, 'delete'])->name('admin.gas-station-fuel.delete');
+
+});
+
+Route::group(['prefix' => 'company', 'middleware' => ['company.check']], function () {
+    Route::get('/index', [CompanyCompanyController::class, 'index'])->name('company.index');
+    // Fuel Prices
+    Route::get('/fuel-prices/list', [CpnPriceController::class, 'list'])->name('company.fuel-prices.list');
+    Route::get('/fuel-prices/create', [CpnPriceController::class, 'create'])->name('company.fuel-prices.create');
+    Route::post('/fuel-prices/create', [CpnPriceController::class, 'store'])->name('company.fuel-prices.store');
+    Route::get('/fuel-prices/edit/{id}', [CpnPriceController::class, 'edit'])->name('company.fuel-prices.edit');
+    Route::post('/fuel-prices/edit/{id}', [CpnPriceController::class, 'update'])->name('company.fuel-prices.update');
+    Route::get('/fuel-prices/delete/{id}', [CpnPriceController::class, 'delete'])->name('company.fuel-prices.delete');
+    // Gas Stations
+    Route::get('/gas-stations/list', [CompanyGasStationController::class, 'list'])->name('company.gas-stations.list');
+    Route::get('/gas-stations/create', [CompanyGasStationController::class, 'create'])->name('company.gas-stations.create');
+    Route::post('/gas-stations/create', [CompanyGasStationController::class, 'store'])->name('company.gas-stations.store');
+    Route::get('/gas-stations/edit/{id}', [CompanyGasStationController::class, 'edit'])->name('company.gas-stations.edit');
+    Route::post('/gas-stations/edit/{id}', [CompanyGasStationController::class, 'update'])->name('company.gas-stations.update');
+    Route::get('/gas-stations/delete/{id}', [CompanyGasStationController::class, 'delete'])->name('company.gas-stations.delete');
+    // Gas Station Fuel
+    Route::get('/gas-station-fuel/list/{id}', [CompanyGasStationFuelController::class, 'list'])->name('company.gas-station-fuel.list');
+    Route::get('/gas-station-fuel/create/{id}', [CompanyGasStationFuelController::class, 'create'])->name('company.gas-station-fuel.create');
+    Route::post('/gas-station-fuel/create/{id}', [CompanyGasStationFuelController::class, 'store'])->name('company.gas-station-fuel.store');
+    Route::get('/gas-station-fuel/edit/{id}', [CompanyGasStationFuelController::class, 'edit'])->name('company.gas-station-fuel.edit');
+    Route::post('/gas-station-fuel/edit/{id}', [CompanyGasStationFuelController::class,'update'])->name('company.gas-station-fuel.update');
+    Route::get('/gas-station-fuel/delete/{id}', [CompanyGasStationFuelController::class, 'delete'])->name('company.gas-station-fuel.delete');
 
 });

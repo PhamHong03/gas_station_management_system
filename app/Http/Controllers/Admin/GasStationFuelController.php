@@ -42,7 +42,7 @@ class GasStationFuelController extends Controller{
     public function delete($id){
         $gasStation = GasStationFuel::find($id);
         $this->gasStationFuelAdService->delete($id);
-        return redirect()->route('admin.gas-station-fuel.list' , ['id'=> $gasStation->GasStationId])->with('success', 'Xóa thành công');
+        return redirect()->route('admin.gas-station-fuel.list' , ['id'=> $gasStation ->GasStationId])->with('success', 'Xóa thành công');
     }
 }
 

@@ -22,7 +22,11 @@ class AuthController extends Controller
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password ])) {
             if (Auth::user()->role == 1) {
                 return redirect()->route('admin');
-            } else {
+            }
+            if (Auth::user()->role == 2){
+                return redirect()->route('company.index');
+            }
+            else {
                 return redirect()->route('index');
             }
         }

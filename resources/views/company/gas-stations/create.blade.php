@@ -1,14 +1,14 @@
-@extends('admin.layouts.main')
-@section('title', 'Sửa Cây xăng')
+@extends('company.layouts.main')
+@section('title', 'Thêm Cây xăng')
 @section('content')
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="page-header">
-                <h3 class="page-title"> Sửa Cây xăng</h3>
+                <h3 class="page-title"> Thêm Cây xăng</h3>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.gas-stations.list') }}">Cây xăng</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Sửa Cây xăng</li>
+                        <li class="breadcrumb-item"><a href="{{ route('company.gas-stations.list') }}">Cây xăng</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Thêm Cây xăng</li>
                     </ol>
                 </nav>
             </div>
@@ -16,13 +16,13 @@
                 <div class="col-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Sửa Cây xăng</h4>
+                            <h4 class="card-title">Thêm Cây xăng</h4>
                             <form class="forms-sample" action="" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="exampleInputName1">Tên cây xăng</label>
                                     <input type="text" class="form-control" id="exampleInputName1" name="name"
-                                        placeholder="Tên cây xăng" value="{{ $gasStation->name }}">
+                                        placeholder="Tên cây xăng">
                                     @error('name')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror
@@ -30,7 +30,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputName1">Số điện thoại</label>
                                     <input type="text" class="form-control" name="phone" id="exampleInputName1"
-                                        placeholder="phone" value="{{ $gasStation->phone }}">
+                                        placeholder="phone">
                                     @error('phone')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror
@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputName1">Kinh độ</label>
                                     <input type="text" class="form-control" name="longitude" id="exampleInputName1"
-                                        placeholder="Kinh độ" value="{{ $gasStation->longitude }}">
+                                        placeholder="Kinh độ">
                                     @error('longitude')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror
@@ -47,7 +47,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputName1">Vỹ độ</label>
                                     <input type="text" class="form-control" name="latitude" id="exampleInputName1"
-                                        placeholder="latitude" value="{{ $gasStation->latitude }}">
+                                        placeholder="latitude">
                                     @error('latitude')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror
@@ -56,7 +56,7 @@
                                 <div class="form-group">
                                     <label for="citySelect">Tỉnh/Thành Phố</label>
                                     <select class="form-select" id="citySelect">
-                                        <option value="{{ $citi->id }}">{{ $citi->name }}</option>
+                                        <option value="">Chọn Tỉnh/Thành Phố</option>
                                         @foreach ($cities as $city)
                                             <option value="{{ $city->id }}">{{ $city->name }}</option>
                                         @endforeach
@@ -80,7 +80,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputName1">Địa chỉ chi tiết</label>
                                     <input type="text" class="form-control" name="address" id="exampleInputName1"
-                                        placeholder="address" value="{{ $gasStation->address }}">
+                                        placeholder="address">
                                     @error('address')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror
@@ -88,15 +88,15 @@
                                 <div class="form-group">
                                     <label for="exampleInputName1">Giờ hoạt động</label>
                                     <input type="text" class="form-control" name="operation_time" id="exampleInputName1"
-                                        placeholder="operation_time" value="{{ $gasStation->operation_time }}">
+                                        placeholder="operation_time">
                                     @error('operation_time')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputName1">Công Ty Đầu mối</label>
+                                    <labelfor="exampleInputName1">Công Ty Đầu mối</labelfor=>
                                     <select name="CompanyId" class="form-select" id="">
-                                        <option value="{{ $gasStation->company->name }}">Chọn Công Ty</option>
+                                        <option value="">Chọn Công Ty</option>
                                         @foreach ($companies as $company)
                                             <option value="{{ $company->id }}">{{ $company->name }}</option>
                                         @endforeach
@@ -107,20 +107,14 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="exampleInputName1">Hình ảnh</label>
-                                    @if ($gasStation->image)
-                                        <div>
-                                            <img src="{{ asset('storage/' . $gasStation->image) }}"
-                                                alt="Hình ảnh trạm xăng" class="img-fluid rounded"
-                                                style="max-width: 200px; height: auto;">
-                                        </div>
-                                        <input type="file" class="form-control" name="image" id="exampleInputName1"
-                                            placeholder="Chọn ảnh nếu muốn thay đổi ảnh">
-                                    @else
-                                        <input type="file" class="form-control" name="image" id="exampleInputNam"
-                                            placeholder="Chọn ảnh">
-                                    @endif
+                                    <input type="file" class="form-control" name="image" id="exampleInputNam"
+                                        placeholder="Chọn ảnh">
+                                    @error('image')
+                                        <div class="ms-5 text-danger">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <button type="submit" class="btn btn-gradient-primary me-2">Sửa</button>
+
+                                <button type="submit" class="btn btn-gradient-primary me-2">Tạo</button>
                             </form>
                         </div>
                     </div>
