@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Requests\Request;
+// namespace App\Http\Requests\Request;
+namespace App\Http\Request;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +12,7 @@ class MapRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
