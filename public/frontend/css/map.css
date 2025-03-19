@@ -1,123 +1,335 @@
+/* Reset */
 html, body {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    overflow: hidden;
-  }
-  /* Bản đồ */
-  #map {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transition: margin-left 0.3s ease-in-out;
-  }
-  /* Khi panel mở, map dịch sang phải 25% */
-  #map.expanded {
-    margin-left: 25%;
-  }
-  /* Ô tìm kiếm */
-  #search-box {
-    position: absolute;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    align-items: center;
-    background: white;
-    border-radius: 25px; /* Làm tròn góc */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    width: 350px; /* Điều chỉnh chiều rộng */
-    height: 40px; /* Điều chỉnh chiều cao */
-    z-index: 1000;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+/* Bản đồ */
+#map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+/* Khi mở panel, map bị đẩy sang phải */
+#map.expanded {
+  margin-left: 25%;
+}
+
+/* Ô tìm kiếm */
+#search-box {
+  position: fixed; /* Cố định vị trí */
+  top: 20px;
+  left: 55px;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  width: 20%;
+  height: 40px;
+  z-index: 3000; /* Đảm bảo nằm trên panel */
 }
 
 #search-input {
-    flex: 1;
-    border: none;
-    outline: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 25px; /* Bo tròn input */
+  flex: 1;
+  border: none;
+  outline: none;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
 }
 
 #search-btn {
-    border: none;
-    color: white;
-    padding: 10px 15px;
-    margin-left: 10px;
-    font-size: 18px;
-    border-radius: 50%; /* Làm nút tròn */
-    cursor: pointer;
-   
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 5px;
 }
 
-#search-btn:hover {
-    background: #0056b3;
+.fa-diamond-turn-right {
+  font-size: 23px;
+  color: #007bff;
+  cursor: pointer;
+  margin-left: 5px;
+  margin-right: 10px;
+  transition: transform 0.3s ease-in-out;
 }
 
-  /* Panel thông tin bên trái */
-  #info-panel {
-    width: 25%;
-    height: 100vh;
-    background: white;
-    border-right: 1px solid #ccc;
-    padding: 20px;
-    overflow-y: auto;
-    position: fixed;
-    left: -50%; /* Ẩn panel đi */
-    top: 0;
-    z-index: 1000;
-    transition: left 0.3s ease-in-out;
-  }
-  #info-content img {
-    width: 400px;
-    max-height: 200px; 
-    object-fit: cover;
-    border-radius: 10px;
-    display: block;
-    margin: 10px 0;
-  }
-  
-  /* Khi panel mở */
-  #info-panel.show {
-    left: 0;
-  }
-
-  /* Tab container */
-#tab-container {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 2px solid #ccc;
-    margin-bottom: 10px;
-}
-.tab-btn {
-    flex: 1;
-    padding: 10px;
-    background: #f0f0f0;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-}
-.tab-btn.active {
-    background: #007bff;
-    color: white;
+.fa-diamond-turn-right:hover {
+  color: #6e6e6e;
 }
 
-/* Tab content */
-.tab-panel {
-    display: none;
+
+/* Panel thông tin bên trái */
+#info-panel {
+  width: 25%;
+  height: 100vh;
+  background: white;
+  border-right: 1px solid #ccc;
+  padding:  0px 20px  0px 20px;
+  overflow-y: auto;
+  position: fixed;
+  left: -50%; /* Ban đầu ẩn */
+  top: 0;
+  z-index: 2000;
+  transition: left 0.3s ease-in-out;
 }
-.tab-panel.active {
-    display: block;
+
+/* Khi panel mở */
+#info-panel.show {
+  left: 0;
 }
 
 /* Image styling */
 #place-image {
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+/* Cố định vị trí nút zoom */
+.leaflet-control-zoom {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  z-index: 1000 !important;
+  display: flex !important;
+  flex-direction: column;
+}
+
+
+#review-form {
+  margin-top: 10px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px; /* Giới hạn chiều rộng form */
+}
+
+#review-form input, 
+#review-form select, 
+#review-form textarea, 
+#review-form button {
+  width: 100%; /* Đảm bảo tất cả phần tử đều có cùng chiều rộng */
+  padding: 10px;
+  margin-top: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  box-sizing: border-box; /* Tránh tràn kích thước do padding */
+}
+
+#review-form textarea {
+  height: 80px; /* Tăng chiều cao ô nhập nhận xét */
+  resize: none; /* Không cho phép thay đổi kích thước */
+}
+
+#review-form button {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  margin-bottom: 20px;
+  transition: background 0.3s;
+}
+
+#review-form button:hover {
+  background-color: #0056b3;
+}
+
+#close-btn {
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Làm nút tròn */
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease-in-out;
+}
+
+#close-btn:hover {
+  background: #cc0000; /* Màu đỏ đậm hơn khi hover */
+}
+
+/* Ẩn nút tìm kiếm mặc định của map */
+.leaflet-control-geocoder {
+  display: none !important;
+}
+
+
+#danhmuc {
+  position: absolute;  /* Giữ cố định trên bản đồ */
+  top: 10px;  /* Khoảng cách từ trên xuống */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 10px;
+  z-index: 3000;  /* Đảm bảo nó nằm trên bản đồ */
+}
+
+
+.category-btn {
+  padding: 10px 20px;
+  border: none;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.category-btn:hover {
+  background-color: #636363; /* Màu xanh đậm khi hover */
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ */
+}
+
+.category-btn:active {
+  background-color: #525252; /* Màu khi nhấn */
+  transform: scale(0.95);
+}
+
+.category-btn.selected {
+  background-color: #28a745; /* Màu xanh lá khi được chọn */
+}
+
+/* navigation */
+#navigation-form {
+  width: 25%;
+  height: 100vh;
+  background: white;
+  border-right: 1px solid #ccc;
+  padding:  100px 20px  0px 20px;
+  overflow-y: auto;
+  position: fixed;
+  left: -50%; /* Ban đầu ẩn */
+  top: 0;
+  z-index: 4000;
+  transition: left 0.3s ease-in-out;
+}
+
+#navigation-form.show {
+  left: 0;
+}
+
+/* button close_navigation */
+#nav-close-btn {
+  color: white;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%; /* Làm nút tròn */
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background 0.3s ease-in-out;
+}
+
+#nav-close-btn:hover {
+  background: #cc0000; /* Màu đỏ đậm hơn khi hover */
+}
+
+
+#start-location{
+  top: 10px;
+  display: flex;
+  margin-left: 20px;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  width: 85%;
+  height: 30px;
+}
+
+
+#end-location{
+  margin-top: 15px;
+  display: flex;
+  margin-left: 20px;
+  align-items: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  padding: 5px;
+  width: 85%;
+  height: 30px;
+}
+/* ------------------- */
+
+/* avatar người dùng */
+#user-avatar {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 4000;
+
+}
+
+#user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+#user-avatar:hover {
+  transform: scale(1.1);
+}
+
+/* popup */
+.popup-container {
+  padding: 10px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+.popup-title {
+  margin: 5px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+.popup-rating {
+  margin: 5px 0;
+  font-size: 14px;
+}
+.popup-hours {
+  margin: 5px 0;
+  font-size: 14px;
 }
