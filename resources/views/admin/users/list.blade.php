@@ -6,10 +6,10 @@
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="page-header">
-                <h3 class="page-title"> User </h3>
+                <h3 class="page-title"> Tài khoản </h3>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.users.list') }}">Danh sách User</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.users.list') }}">Danh sách tài khoản</a></li>
                     </ol>
                 </nav>
             </div>
@@ -17,14 +17,13 @@
                 <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Danh sách User</h4>
+                            <h4 class="card-title">Danh sách tài khoản</h4>
                             <table class="table table-striped">
                                 <thead>
                                     <tr>
                                         <th> Họ và tên </th>
                                         <th> Email </th>
                                         <th> CCCD </th>
-                                        <th> Mật khẩu </th>
                                         <th> Quyền </th>
                                         <th> Trạng thái </th>
                                         <th> Hành động </th>
@@ -35,8 +34,7 @@
                                         <tr>
                                             <td> {{ $user->name }} </td>
                                             <td> {{ $user->email }} </td>
-                                            <td> {{ $user->cccd }} </td>
-                                            <td> {{ $user->password }} </td>
+                                            <td> {{ $user->CCCD }} </td>
                                             <td>
                                                 @if ($user->role == 0)
                                                     User
@@ -47,7 +45,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if ($user->status == 1)
+                                                @if ($user->active == 1)
                                                     Đang hoạt động
                                                 @else
                                                     Đã khóa
@@ -69,5 +67,14 @@
             </div>
         </div>
     </div>
+    <style>
+        .wrap-text {
+            word-wrap: break-word;
+            word-break: break-all;
+        }
 
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
 @endsection

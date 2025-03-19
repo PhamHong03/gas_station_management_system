@@ -4,10 +4,10 @@
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="page-header">
-                <h3 class="page-title"> Thêm User </h3>
+                <h3 class="page-title"> Thêm Tài Khoản </h3>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.users.list') }}">User</a></li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.users.list') }}">Tài khoản</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Thêm User</li>
                     </ol>
                 </nav>
@@ -16,7 +16,7 @@
                 <div class="col-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Thêm User</h4>
+                            <h4 class="card-title">Thêm Tài Khoản</h4>
                             <form class="forms-sample" action="" method="post">
                                 @csrf
                                 <div class="form-group">

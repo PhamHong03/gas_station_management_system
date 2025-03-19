@@ -4,11 +4,11 @@
     <div class="main-panel">
         <div class="content-wrapper">
             <div class="page-header">
-                <h3 class="page-title"> Thêm User </h3>
+                <h3 class="page-title"> Thêm tài khoản </h3>
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="{{ route('admin.users.list') }}">User</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Sửa User</li>
+                        <li class="breadcrumb-item"><a href="{{ route('admin.users.list') }}">Tài khoản</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Sửa tài khoản</li>
                     </ol>
                 </nav>
             </div>
@@ -16,7 +16,7 @@
                 <div class="col-12 grid-margin stretch-card">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Sửa User</h4>
+                            <h4 class="card-title">Sửa tài khoản</h4>
                             <form class="forms-sample" action="{{ route('admin.users.edit', ['id' => $user->id]) }}"
                                 method="post">
                                 @csrf
