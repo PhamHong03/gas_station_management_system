@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Maps\MapController;
+use Illuminate\Routing\RouteRegistrar;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Maps\GasStationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,3 +21,8 @@ Route::get('/', [MapController::class, 'index']);
 
 
 Route::get('/admin', [MainController::class, 'index']);
+
+
+Route::get('/gas-station',[GasStationController::class,'findNearestGasStations']);
+
+Route::get('/gas-station/Findway', [GasStationController::class, 'findGasStationsByLocation']);
