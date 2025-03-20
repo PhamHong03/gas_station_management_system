@@ -14,8 +14,8 @@ return new class extends Migration
             $table->id();
             $table->decimal('price', 10, 2);
             $table->date('start_date');
-            $table->unsignedInteger('fuel_type_id');
-            $table->unsignedInteger('company_id');
+            $table->unsignedInteger('FuelTypeId');
+            $table->unsignedInteger('CompanyId');
             $table->timestamps();
         });
     }

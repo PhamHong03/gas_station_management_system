@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('gastation_fuel_type', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('gastation_id');
-            $table->unsignedInteger('fuel_type_id');
+            $table->unsignedInteger('GasStationId');
+            $table->unsignedInteger('FuelTypeId');
             $table->timestamps();
         });
     }

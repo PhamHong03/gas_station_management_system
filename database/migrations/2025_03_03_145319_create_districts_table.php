@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up() {
         Schema::create('districts', function (Blueprint $table) {
-            $table->id('district_id');
+            $table->id();
             $table->string('name');
-            $table->unsignedInteger('city_id');
+            $table->unsignedInteger('CityId');
             $table->timestamps();
         });
     }

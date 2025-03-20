@@ -15,10 +15,16 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     protected $table = 'users';
-    protected $fillable = ['name', 'email', 'CCCD', 'password', 'phone', 'address', 'role'];
+    protected $fillable = ['name', 'email', 'CCCD', 'password', 'active', 'role'];
 
     public function review() {
         return $this->hasMany(Review::class, 'UserId', 'id');
+    }
+    public function company() {
+        return $this->hasMany(Company::class, 'UserId', 'id');
+    }
+    public function manager() {
+        return $this->hasOne(Manager::class, 'UserId', 'id');
     }
 
 }

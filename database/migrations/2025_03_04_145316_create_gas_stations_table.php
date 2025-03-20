@@ -18,9 +18,9 @@ return new class extends Migration
             $table->decimal('longitude', 10, 7);
             $table->decimal('latitude', 10, 7);
             $table->string('image')->nullable();
-            $table->dateTime('operation_time');
-            $table->unsignedInteger('company_id');
-            $table->unsignedInteger('ward_id');
+            $table->string('operation_time');
+            $table->unsignedInteger('CompanyId');
+            $table->unsignedInteger('WardId');
             $table->timestamps();
         });
     }

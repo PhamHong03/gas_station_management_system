@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 class MainController extends Controller
 {
     public function index(){
-        return view('admin.main',[
-            'title' => "Trang quản trị"
-        ]);
+        return view('admin.index');
     }
 }

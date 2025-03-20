@@ -12,7 +12,7 @@ class Company extends Model {
     use HasFactory;
 
     protected $table = 'companies';
-    protected $fillable = ['name', 'address', 'phone', 'longitude', 'latitude', 'ManagerId'];
+    protected $fillable = ['name', 'address', 'phone', 'longitude', 'latitude', 'UserId' , 'ManagerId'];
 
     public function manager() {
         return $this->belongsTo(Manager::class, 'ManagerId', 'id');
@@ -22,5 +22,8 @@ class Company extends Model {
     }
     public function price()  {
         return $this->hasMany(Price::class, 'CompanyId', 'id');
+    }
+    public function user() {
+        return $this->belongsTo(User::class, 'UserId', 'id');
     }
 }
