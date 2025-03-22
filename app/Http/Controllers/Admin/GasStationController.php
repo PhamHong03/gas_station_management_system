@@ -47,4 +47,5 @@ class GasStationController extends Controller
         $this->gasStationServer->delete($id);
         return redirect()->route('admin.gas-stations.list')->with('success', 'Xóa thành công');
     }
+
 }

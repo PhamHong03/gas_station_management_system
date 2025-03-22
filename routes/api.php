@@ -19,5 +19,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/gas-station',[GasStationController::class,'findNearestGasStations']);
+
 

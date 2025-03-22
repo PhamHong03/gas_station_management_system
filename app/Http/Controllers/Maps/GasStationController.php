@@ -17,15 +17,12 @@ class GasStationController extends Controller {
         $this->gasStationServices = $gasStationServices;
     }
 
-    public function findNearestGasStations()
-    {
-        $this->gasStationServices->findNear();
+ 
 
-        return ;
-    }
-    public function findGasStationsByLocation()
+
+    public function findNearestGasStations(GasStationRequest $request)
     {
-        $this->gasStationServices->findNearByRadius();
+        $this->gasStationServices->findNear($request);
 
         return ;
     }

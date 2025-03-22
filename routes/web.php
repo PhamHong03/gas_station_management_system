@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\GasStationFuelController;
 use App\Http\Controllers\Company\GasStationFuelController as CompanyGasStationFuelController;
 use App\Http\Controllers\Company\PriceController as CpnPriceController;
 use App\Http\Controllers\Company\CompanyController as CompanyCompanyController;
+use App\Http\Controllers\Maps\GasStationController as Gas;
+
 
 Route::get('/get-districts/{cityId}', [LocationController::class, 'getDistricts']);
 Route::get('/get-wards/{districtId}', [LocationController::class, 'getWards']);
@@ -26,6 +28,9 @@ Route::post('/login', [AuthController::class, 'auth']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/register', [AuthController::class, 'registerStore']);
 Route::get('/register', [AuthController::class, 'register'])->name('register');
+
+Route::get('/gas-station/FindGas',[Gas::class,'findNearestGasStations']);
+Route::get('/gas-station/FindBy',[Gas::class,'findGasStationsByLocation']);
 
 Route::group(['prefix' => 'admin', 'middleware' => ['admin.check']], function () {
     Route::get('/index', [MainController::class, 'index'])->name('admin');
