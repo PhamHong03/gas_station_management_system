@@ -5,6 +5,10 @@ use App\Models\GasStation;
 use Illuminate\Support\Str;
 use App\Models\GasStationFuel;
 use App\Http\Request\GasStation\AddGasStationRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use App\Http\Requests\GasStation\GasStationRequest;
+
 
 class GasStationCpnService
 {
@@ -84,4 +88,50 @@ class GasStationCpnService
         if($gasStation->delete()) return true;
         return redirect()->back()->with('error', 'Xóa cây xăng thất bại');
     }
+    public function findNear(GasStationRequest $request) {
+        // $request->validate([
+        //     'latitude' => 'required|numeric',
+        //     'longitude' => 'required|numeric',
+        //     'radius' => 'nullable|numeric|min:0' // Bán kính tìm kiếm (km), mặc định 5km
+        // ]);
+
+       
+        $radius = 5; // Bán kính mặc định là 5km
+        
+        $validatedData = $request->validated();
+        $latitude = $validatedData['latitude'];
+        $longitude = $validatedData['longitude'];
+        $gasStations = DB::table('gas_stations')
+            ->selectRaw("
+            id, name, address, phone, longitude, latitude,
+            (6371 * acos(cos(radians(?)) * cos(radians(latitude)) 
+            * cos(radians(longitude) - radians(?)) + sin(radians(?)) 
+            * sin(radians(latitude)))) AS distance
+        ", [$latitude, $longitude, $latitude])
+            ->having('distance', '<=', $radius)
+            ->orderBy('distance', 'asc')
+            ->get();
+
+
+        echo ($gasStations);
+        return response()->json($gasStations, 200, [], JSON_UNESCAPED_UNICODE);
+
+    }
+    public function findNearByRadius() {
+        $lat1 = 10.776;  // Tọa độ điểm A
+        $lon1 = 106.700;
+        
+        $lat2 = 10.780;  // Tọa độ điểm B
+        $lon2 = 106.710;
+        
+        $url = "http://router.project-osrm.org/route/v1/driving/{$lon1},{$lat1};{$lon2},{$lat2}?geometries=geojson";
+        
+        $response = Http::get($url);
+        $data = $response->json();
+        
+        // Lấy danh sách các tọa độ của đường đi
+        $coordinates = $data['routes'][0]['geometry']['coordinates'] ?? [];
+        
+        return response()->json($coordinates);
+    } 
 }

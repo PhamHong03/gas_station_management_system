@@ -22,7 +22,9 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Import Leaflet Geocoder JS -->
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> 
   <script>
     var mapOptions = {
       center: [10.026667, 105.783333],
@@ -62,8 +64,15 @@
         iconAnchor: [20, 40], // Điểm neo của icon (nằm dưới cùng ở giữa)
         popupAnchor: [0, -40] // Điểm neo của popup
     });
+    var userIcon = L.icon({
+        iconUrl: '/assets/images/location.png', // Đường dẫn đến ảnh
+        iconSize: [20, 20], // Kích thước icon (chiều rộng, chiều cao)
+        iconAnchor: [20, 40], // Điểm neo của icon (nằm dưới cùng ở giữa)
+        popupAnchor: [0, -40] // Điểm neo của popup
+    });
 
 
+/*
     var locations = [
       { 
           id: 1,
@@ -94,7 +103,7 @@
       ]
       }
     ];
-    
+    */
     function getStarRating(rating) {
       var fullStar = '⭐';
       var stars = "";
@@ -119,7 +128,7 @@
                 iconAnchor: [20, 40], // Vị trí của logo
                 popupAnchor: [1, -34] // Vị trí của popup
             });
-
+/*
     locations.forEach(function(location) {
       var marker = L.marker(location.coords).addTo(map);
             
@@ -181,7 +190,96 @@
         showInfoPanel();
       });
     });
+*/
 
+let userLat, userLon;
+
+navigator.geolocation.getCurrentPosition(function (position) {
+    userLat = position.coords.latitude;
+    userLon = position.coords.longitude;
+    var userLocation = L.marker([userLat, userLon]).addTo(map);
+    userLocation.setIcon(userIcon);
+    userLocation.addTo(map);
+    userLocation.bindPopup("Vị trí của bạn").openPopup();
+    map.setView([userLat, userLon], 15);
+    FetchLocation(userLat, userLon);
+}, function (error) {
+    console.error("Không thể lấy vị trí của bạn:", error);
+    FetchLocation(10.04501, 105.78088);
+});
+
+async function FetchLocation(Lat, Lon) {
+    try {
+        
+        fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Lỗi khi lấy dữ liệu từ API");
+            }
+            return response.json();
+        })
+        .then(data=>{
+          if(!Array.isArray(data)){
+            console.error("Dữ liệu API không hợp lệ:", data);
+            return;
+          }
+          data.forEach(location => {
+            const lat = parseFloat(location.latitude);
+            const lon = parseFloat(location.longitude);
+
+            var marker = L.marker([lat, lon], ).addTo(map);
+            marker.setIcon(icon);
+            marker.addTo(map);
+            var popupContent = `
+                <div>
+                    <h3>${location.name}</h3>
+                    <p>📍 ${location.address}</p>
+                    <p>📞 ${location.phone}</p>
+                    <p>📏 Cách bạn: <b>${location.distance} km</b></p>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+
+            marker.on("click", function () {
+
+                document.getElementById("info-content").innerHTML = `
+                    <div>
+                        <h3>${location.name}</h3>
+                        <p><strong>📍 Địa chỉ:</strong> ${location.address}</p>
+                        <p><strong>📞 Điện thoại:</strong> ${location.phone}</p>
+                        <p><strong>📏 Khoảng cách:</strong> ${location.distance} km</p>
+                        <button onclick="showRoute(${Lat}, ${Lon}, ${lat}, ${lon})">🚗 Chỉ đường</button>
+                    </div>
+                `;
+                showInfoPanel();
+            });
+          });
+        })
+
+    } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu:", error);
+    }
+}
+
+var currentRoute = null;
+// Hàm hiển thị đường đi
+function showRoute(userLat, userLon, destLat, destLon) {
+  // Xóa tuyến đường cũ nếu có
+  if (currentRoute) {
+    map.removeControl(currentRoute);
+  }
+
+  // Tạo tuyến đường mới
+  currentRoute = L.Routing.control({
+    waypoints: [
+      L.latLng(userLat, userLon), // Vị trí của bạn
+      L.latLng(destLat, destLon) // Trạm xăng được click
+    ],
+    routeWhileDragging: true
+  }).addTo(map);
+}
+
+FetchLocation();
     document.getElementById("close-btn").addEventListener("click", hideInfoPanel);
 
   </script>
