@@ -2,21 +2,97 @@
 
 <body>
   <!-- Map Container -->
+  <div id="user-avatar">
+    <img src="https://i.pravatar.cc/1" alt="User Avatar">
+  </div>
+
   <div id="map">
     <div id="search-box">
       <input type="text" id="search-input" placeholder="Nhập địa chỉ...">
       <button id="search-btn">🔍</button>
+      <i id="nav-icon" class="fa-solid fa-diamond-turn-right"></i>
+      </div>
+
+    <div id="navigation-form">
+      <button id="nav-close-btn">❌</button>
+      
+      <input type="text" id="start-location" placeholder="Nhập điểm xuất phát..." >
+      <input type="text" id="end-location" placeholder="Nhập điểm đến...">
     </div>
   </div>
-  
+
+  <div id="danhmuc">
+      <button class="category-btn">Cửa hàng xăng</button>
+      <button class="category-btn">Trạm sạc điện</button>
+      <button class="category-btn">Cây ATM</button>
+  </div>
+
+
   <!-- Panel Thông tin bên trái -->
   <div id="info-panel">
-    <button id="close-btn">❌</button>
-    <h2>Thông Tin Địa Điểm</h2>
+  <button id="close-btn">❌</button>
+
     <div id="info-content">
       <p>Chọn một địa điểm trên bản đồ để xem chi tiết.</p>
     </div>
   </div>
+  
+  <div id="info-panel" class="hidden">
+    <button id="close-btn">❌</button>
+    <div id="info-content">
+      <div data-location-id="1">
+        <img src="https://via.placeholder.com/300" alt="Tên địa điểm" style="max-width:100%; height:auto; display:block; margin:0 auto;">
+        <h3>Tên địa điểm</h3>
+        <p><strong>Đánh giá:</strong> ⭐⭐⭐⭐☆ (4.5/5)</p>
+
+        <div id="tab-content">
+          <!-- Tab 1: Tổng Quan -->
+          <div class="tab-panel active" id="overview">
+            <p><strong>📍 Địa chỉ:</strong> Địa chỉ mẫu</p>
+            <p><strong>⏰ Giờ hoạt động:</strong> 08:00 - 22:00</p>
+            <p><strong>📞 Điện thoại:</strong> 0123 456 789</p>
+          </div>
+          <hr>
+
+          <!-- Bài Đánh Giá -->
+          <div id="reviews">
+            <h3>📢 Bài Đánh Giá</h3>
+            <div id="review-list">
+              <div class="review-item">
+                <p><strong>Nguyễn Văn A</strong> - ⭐⭐⭐⭐⭐</p>
+                <p>💬 Dịch vụ tốt, nhân viên thân thiện!</p>
+              </div>
+              <div class="review-item">
+                <p><strong>Trần Thị B</strong> - ⭐⭐⭐⭐☆</p>
+                <p>💬 Giá cả hợp lý, phục vụ nhanh.</p>
+              </div>
+            </div>
+
+            <h3>Thêm Đánh Giá</h3>
+            <form id="review-form">
+              <input type="text" id="review-name" placeholder="Tên bạn" required><br>
+              <select id="review-rating">
+                <option value="5">⭐⭐⭐⭐⭐</option>
+                <option value="4">⭐⭐⭐⭐</option>
+                <option value="3">⭐⭐⭐</option>
+                <option value="2">⭐⭐</option>
+                <option value="1">⭐</option>
+              </select><br>
+              <textarea id="review-comment" placeholder="Nhận xét của bạn" required></textarea><br>
+              <button type="submit">Gửi</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="popup-container" data-location-id="1">
+    <h3 class="popup-title">Tên Địa Điểm</h3>
+    <p class="popup-rating">Đánh giá: <span class="rating-stars">⭐⭐⭐⭐</span> (4/5)</p>
+    <p class="popup-hours">⏰ Giờ mở cửa: <b>06:00 - 22:00</b></p>
+  </div>
+
   
   <!-- Import Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -26,7 +102,8 @@
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> 
   <script>
-    var mapOptions = {
+
+var mapOptions = {
       center: [10.026667, 105.783333],
       zoom: 15
     };
@@ -45,7 +122,7 @@
     var geocoder = L.Control.Geocoder.nominatim();
     var control = L.Control.geocoder({
       geocoder: geocoder,
-      defaultMarkGeocode: true
+      defaultMarkGeocode: false
     }).addTo(map);
     
     control.on("markgeocode", function(e) {
@@ -122,6 +199,7 @@
       document.getElementById("map").classList.remove("expanded");
     }
 
+    
     var icon = L.icon({
                 iconUrl: 'https://cdn-icons-png.flaticon.com/512/6686/6686706.png', // Đường dẫn đến logo Đại học Cần Thơ
                 iconSize: [40, 40], // Kích thước của logo
@@ -151,6 +229,9 @@
         this.closePopup();
       });
       
+
+
+
       // ✅ Panel bên trái sẽ HIỂN THỊ hình ảnh
       marker.on("click", function() {
         document.getElementById("info-content").innerHTML = `
@@ -177,10 +258,25 @@
                             <div class="review-item">
                                 <p><strong>${review.name}</strong> - ${getStarRating(review.rating)}</p>
                                 <p>💬 ${review.comment}</p>
+                                
                             </div>
                         `).join('')
                         : "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>"
+                        
                     }
+                    <h3>Thêm Đánh Giá</h3>
+                    <form id="review-form">
+                      <input type="text" id="review-name" placeholder="Tên bạn" required><br>
+                      <select id="review-rating">
+                        <option value="5">⭐⭐⭐⭐⭐</option>
+                        <option value="4">⭐⭐⭐⭐</option>
+                        <option value="3">⭐⭐⭐</option>
+                        <option value="2">⭐⭐</option>
+                        <option value="1">⭐</option>
+                      </select><br>
+                      <textarea id="review-comment" placeholder="Nhận xét của bạn" required></textarea><br>
+                      <button type="submit">Gửi</button>
+                    </form>
                     </div>
                 </div>
             </div>
@@ -281,6 +377,27 @@ function showRoute(userLat, userLon, destLat, destLon) {
 
 FetchLocation();
     document.getElementById("close-btn").addEventListener("click", hideInfoPanel);
+
+
+    // button navigation
+    function showNavForm() {
+      document.getElementById("navigation-form").classList.add("show");
+      document.getElementById("map").classList.add("expanded");
+
+    }
+
+    function hideNavForm() {
+      document.getElementById("navigation-form").classList.remove("show");
+      document.getElementById("map").classList.remove("expanded");
+
+    }
+
+    // Khi nhấn vào icon navigation, hiển thị form
+    document.getElementById("nav-icon").addEventListener("click", showNavForm);
+
+    // Khi nhấn vào nút đóng, ẩn form
+    document.getElementById("nav-close-btn").addEventListener("click", hideNavForm);
+
 
   </script>
 </body>
