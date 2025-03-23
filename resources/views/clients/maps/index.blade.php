@@ -13,7 +13,7 @@
       <button id="nav-close-btn">❌</button>
       
       <input type="text" id="start-location" placeholder="Nhập điểm xuất phát..." >
-      <input type="text" id="end-location" placeholder="Nhập điểm đến...">
+      <input type="text" id="end-location" placeholder="Nhập điểm đến....">
     </div>
 
   </div>
