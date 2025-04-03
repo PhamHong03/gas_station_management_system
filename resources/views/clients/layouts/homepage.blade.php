@@ -255,26 +255,27 @@ var mapOptions = {
                     <div id="review-list">
                     ${location.reviews.length > 0
                         ? location.reviews.map(review => `
-                                <div class="review-item">
-                                    <p><strong>${review.name}</strong> - ${getStarRating(review.rating)}</p>
-                                    <p>💬 ${review.comment}</p>
+                                                <div class="review-item">
+                                                    <p><strong>${review.name}</strong> - ${getStarRating(review.rating)}</p>
+                                                    <p>💬 ${review.comment}</p>
 
-                                </div>
-                            `).join('')
+                                                </div>
+                                            `).join('')
                         : "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>"
 
                     }
                     <h3>Thêm Đánh Giá</h3>
-                    <form id="review-form">
+                    <form id="review-form" action= {{ route('user.review', ['id', Auth::id()]) }}>
                       <input type="text" id="review-name" placeholder="Tên bạn" required><br>
-                      <select id="review-rating">
+                      <input typr="hidden" value="gasStation_id">
+                      <select id="review-rating" name='rating'>
                         <option value="5">⭐⭐⭐⭐⭐</option>
                         <option value="4">⭐⭐⭐⭐</option>
                         <option value="3">⭐⭐⭐</option>
                         <option value="2">⭐⭐</option>
                         <option value="1">⭐</option>
                       </select><br>
-                      <textarea id="review-comment" placeholder="Nhận xét của bạn" required></textarea><br>
+                      <textarea id="review-comment" name="content" placeholder="Nhận xét của bạn" required></textarea><br>
                       <button type="submit">Gửi</button>
                     </form>
                     </div>
