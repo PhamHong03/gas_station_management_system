@@ -32,7 +32,7 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 
 //Review
 
-Route::post('/review/{id}', [ReviewController::class , 'store'])->name('review');
+Route::post('/review/{id}', [ReviewController::class , 'store'])->name('user.review');
 
 Route::get('/gas-station/FindGas',[Gas::class,'findNearestGasStations']);
 Route::get('/gas-station/FindBy',[Gas::class,'findGasStationsByLocation']);
