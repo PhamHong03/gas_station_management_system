@@ -139,6 +139,12 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
         };
 
 
+    L.Marker.prototype.options.icon = L.icon({
+        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
+    });
+
+
         var map = new L.map('map', mapOptions);
         var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
         map.addLayer(layer);
