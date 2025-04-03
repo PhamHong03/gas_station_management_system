@@ -1,12 +1,12 @@
 <?php
-
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Maps;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\Review;
 
-class ReviewController extends Controller
-{
+class ReviewController extends Controller{
     public function store(Request $request)
     {
         try {
@@ -15,7 +15,7 @@ class ReviewController extends Controller
             }
 
             $request->validate([
-                'gasStationId' => 'required|exists:gas_stations,id',
+                'gasStationId' => 'required',
                 'rating' => 'required|integer|min:1|max:5',
                 'content' => 'required|string|max:500',
             ]);
@@ -33,3 +33,4 @@ class ReviewController extends Controller
         }
     }
 }
+
