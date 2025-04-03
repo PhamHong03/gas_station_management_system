@@ -31,7 +31,7 @@ html, body {
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
   padding: 5px;
-  width: 20%;
+  width: 18%;
   height: 40px;
   z-index: 3000; /* Đảm bảo nằm trên panel */
 }
@@ -112,7 +112,7 @@ html, body {
   background: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%;
+  width: 80%;
   max-width: 400px; /* Giới hạn chiều rộng form */
 }
 
@@ -303,13 +303,11 @@ html, body {
   z-index: 4000;
 
 }
-
 #user-avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-
 #user-avatar:hover {
   transform: scale(1.1);
 }
@@ -333,3 +331,217 @@ html, body {
   margin: 5px 0;
   font-size: 14px;
 }
+
+/* button chỉ đường */
+#btn-route {
+  background: linear-gradient(135deg, #007bff, #0056b3); /* Hiệu ứng gradient xanh dương */
+  color: white; /* Màu chữ trắng */
+  border: none; /* Bỏ viền */
+  border-radius: 8px; /* Bo góc */
+  padding: 10px 20px; /* Kích thước nút */
+  font-size: 16px; /* Cỡ chữ vừa phải */
+  cursor: pointer; /* Hiệu ứng con trỏ */
+  transition: all 0.3s ease-in-out; /* Hiệu ứng hover */
+  display: flex; /* Căn chỉnh icon và text */
+  align-items: center;
+  gap: 8px; /* Khoảng cách giữa icon và chữ */
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* Đổ bóng nhẹ */
+}
+#btn-route:hover {
+  background: linear-gradient(135deg, #0056b3, #003f7f); /* Màu tối hơn khi hover */
+  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ */
+}
+#btn-route:active {
+  transform: scale(0.95); /* Nhấn xuống hiệu ứng */
+}
+
+
+/* popup user */
+#user-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  display: none;
+  z-index: 3000;
+  min-width: 300px;
+  text-align: center;
+}
+.popup-content {
+  position: relative;
+}
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}
+/* avatar người dùng */
+#user-avatar {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 4000;
+
+}
+.hidden {
+  display: none;
+}
+
+/* TÌM KIẾM ĐƯỜNG */
+.leaflet-routing-container{
+  padding: 0px;
+}
+.leaflet-touch .leaflet-bar {
+  margin-top: 30%;
+}
+.leaflet-routing-alternatives-container {
+  flex-direction: column;
+  width: 320px; /* Giới hạn chiều rộng */
+  max-height: 500px; /* Tránh quá dài */
+  overflow-y: auto; /* Cuộn khi nội dung dài */
+  font-family: Arial, sans-serif;
+  z-index: 1000;
+}
+.leaflet-routing-alt {
+  width: 100%;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.leaflet-routing-alt h2 {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+.leaflet-routing-alt h3 {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+.leaflet-routing-alt table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.leaflet-routing-alt td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+.leaflet-routing-alt tr:last-child td {
+  border-bottom: none;
+}
+.leaflet-routing-container {
+  overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+  overflow-y: hidden; /* Ẩn thanh cuộn dọc */
+}
+
+
+        /* Nền mờ */
+        #popup-overlay {
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5); /* Làm tối nền */
+          z-index: 999;
+      }
+
+      /* Popup Avatar */
+      #popup_avatar {
+          display: none;
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: white;
+          border: 1px solid #ccc;
+          border-radius: 8px;
+          padding: 20px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+          width: 250px;
+          text-align: center;
+          z-index: 1000;
+      }   
+      #popup_avatar.show,
+      #popup-overlay.show {
+          display: block;
+      }
+      .popup-item {
+          margin: 10px 0;
+          cursor: pointer;
+          padding: 8px;
+          border-radius: 5px;
+          background: #f8f8f8;
+          transition: background 0.2s;
+      }
+      .popup-item:hover {
+          background: #ddd;
+      }
+
+      #navigation-form-custom {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        position: relative;
+      }
+    
+      /* Đổi tên ID của nút đóng */
+      #nav-close-btn-custom {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: none;
+        background: transparent;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    
+      /* Đảm bảo các input có ID cụ thể */
+      #start-location-custom,
+      #end-location-custom {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+    
+      #location-btn-custom {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background: blue;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    
+      #location-btn-custom:hover {
+        background: darkblue;
+      }
+    
+      label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+      }
