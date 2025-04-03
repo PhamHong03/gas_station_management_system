@@ -494,3 +494,54 @@ html, body {
           background: #ddd;
       }
 
+      #navigation-form-custom {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        width: 300px;
+        position: relative;
+      }
+    
+      /* Đổi tên ID của nút đóng */
+      #nav-close-btn-custom {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        border: none;
+        background: transparent;
+        font-size: 18px;
+        cursor: pointer;
+      }
+    
+      /* Đảm bảo các input có ID cụ thể */
+      #start-location-custom,
+      #end-location-custom {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+      }
+    
+      #location-btn-custom {
+        width: 100%;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background: blue;
+        color: white;
+        cursor: pointer;
+        font-size: 16px;
+      }
+    
+      #location-btn-custom:hover {
+        background: darkblue;
+      }
+    
+      label {
+        font-weight: bold;
+        margin-top: 10px;
+        display: block;
+      }
