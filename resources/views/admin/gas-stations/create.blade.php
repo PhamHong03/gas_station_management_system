@@ -114,7 +114,7 @@
                                     @enderror
                                 </div>
 
-                                <button type="submit" class="btn btn-gradient-primary me-2">Tạo</button>
+                                <button type="submit" class="btn btn-gradient-primary me-2">Tạo cây xăng</button>
                             </form>
                         </div>
                     </div>

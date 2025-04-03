@@ -477,12 +477,12 @@
                     <div id="review-list">
                     ${location.reviews.length > 0
                         ? location.reviews.map(review => `
-                                <div class="review-item">
-                                    <p><strong>${review.name}</strong> - ${getStarRating(review.rating)}</p>
-                                    <p>💬 ${review.comment}</p>
+                                    <div class="review-item">
+                                        <p><strong>${review.name}</strong> - ${getStarRating(review.rating)}</p>
+                                        <p>💬 ${review.comment}</p>
 
-                                </div>
-                            `).join('')
+                                    </div>
+                                `).join('')
                         : "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>"
 
                     }

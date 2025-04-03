@@ -10,6 +10,8 @@ use App\Models\GasStation;
 use App\Http\Controllers\Controller;
 use App\Http\Services\GasStation\GasStationCpnService;
 use App\Http\Request\GasStation\AddGasStationRequest;
+use App\Http\Requests\GasStation\GasStationRequest;
+
 use Auth;
 
 class GasStationController extends Controller
@@ -49,4 +51,8 @@ class GasStationController extends Controller
         $this->gasStationServer->delete($id);
         return redirect()->route('company.gas-stations.list')->with('success', 'Xóa thành công');
     }
+  
+
+
+
 }

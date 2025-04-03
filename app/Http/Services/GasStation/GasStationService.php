@@ -5,6 +5,8 @@ use App\Models\GasStation;
 use Illuminate\Support\Str;
 use App\Models\GasStationFuel;
 use App\Http\Request\GasStation\AddGasStationRequest;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class GasStationService
 {
@@ -84,4 +86,5 @@ class GasStationService
         if($gasStation->delete()) return true;
         return redirect()->back()->with('error', 'Xóa cây xăng thất bại');
     }
+   
 }
