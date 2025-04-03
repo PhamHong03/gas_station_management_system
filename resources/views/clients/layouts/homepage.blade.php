@@ -6,6 +6,13 @@
     <img src="https://i.pravatar.cc/1" alt="User Avatar">
   </div>
 
+  <div id="popup_avatar">
+    <p><strong>Tên người dùng</strong></p>
+    <p>Email: user@example.com</p>
+    <div class="popup-item" id="login-btn">Đăng nhập</div>
+    <div class="popup-item" id="logout-btn">Đăng xuất</div>
+</div>
+
   <div id="map">
     <div id="search-box">
       <input type="text" id="search-input" placeholder="Nhập địa chỉ...">
@@ -41,7 +48,7 @@
     <button id="close-btn">❌</button>
     <div id="info-content">
       <div data-location-id="1">
-        <img src="https://via.placeholder.com/300" alt="Tên địa điểm" style="max-width:100%; height:auto; display:block; margin:0 auto;">
+        <img src="" alt="Tên địa điểm" style="max-width:100%; height:auto; display:block; margin:0 auto;">
         <h3>Tên địa điểm</h3>
         <p><strong>Đánh giá:</strong> ⭐⭐⭐⭐☆ (4.5/5)</p>
 
@@ -87,32 +94,33 @@
     </div>
   </div>
 
-  <div class="popup-container" data-location-id="1">
+  <!-- <div class="popup-container" data-location-id="1">
     <h3 class="popup-title">Tên Địa Điểm</h3>
     <p class="popup-rating">Đánh giá: <span class="rating-stars">⭐⭐⭐⭐</span> (4/5)</p>
     <p class="popup-hours">⏰ Giờ mở cửa: <b>06:00 - 22:00</b></p>
-  </div>
+  </div> -->
 
   
   <!-- Import Leaflet JS -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Import Leaflet Geocoder JS -->
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+  
   <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
   <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
   <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> 
   <script>
 
-var mapOptions = {
+    var mapOptions = {
       center: [10.026667, 105.783333],
       zoom: 15
     };
 
 
-    L.Marker.prototype.options.icon = L.icon({
-        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
-    });
+    // L.Marker.prototype.options.icon = L.icon({
+    //     iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+    //     shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
+    // });
 
 
     var map = new L.map('map', mapOptions);
@@ -135,6 +143,7 @@ var mapOptions = {
 
 
     // Tạo icon mặc định cho cây xăng
+<<<<<<< Updated upstream
     var gasStationIcon = L.icon({
         iconUrl: 'resources/gas-station.png', // Đường dẫn đến ảnh
         iconSize: [20, 20], // Kích thước icon (chiều rộng, chiều cao)
@@ -180,7 +189,7 @@ var mapOptions = {
       ]
       }
     ];
-    */
+    
     function getStarRating(rating) {
       var fullStar = '⭐';
       var stars = "";
@@ -198,10 +207,32 @@ var mapOptions = {
       document.getElementById("info-panel").classList.remove("show");
       document.getElementById("map").classList.remove("expanded");
     }
-
     
+    
+    // // Định nghĩa icon cây xăng
+    // var gasStationIcon = L.icon({
+    //     iconUrl: 'https://cdn-icons-png.flaticon.com/512/6686/6686706.png', 
+    //     iconSize: [40, 40], // Kích thước của logo
+    //     iconAnchor: [20, 40], // Điểm neo của icon
+    //     popupAnchor: [1, -34] // Điểm neo của popup
+    // });
+
+    //     // Duyệt qua từng địa điểm để thêm marker với icon cây xăng
+    //     locations.forEach(function(location) {
+    //         var marker = L.marker(location.coords, { icon: gasStationIcon }).addTo(map);
+
+    //         marker.bindPopup(`<h3>${location.name}</h3><p>📍 ${location.address}</p><p>📞 ${location.phone}</p>`);
+    //     });
+    // //icon sài được nhưng chưa đúng hình
+    // locations.forEach(function(location) {
+    //     var marker = L.marker(location.coords).addTo(map);
+    //     marker.bindPopup(`<h3>${location.name}</h3><p>📍 ${location.address}</p><p>📞 ${location.phone}</p>`);
+    // });
+
+
+    //icon cay xăng
     var icon = L.icon({
-                iconUrl: 'https://cdn-icons-png.flaticon.com/512/6686/6686706.png', // Đường dẫn đến logo Đại học Cần Thơ
+                iconUrl: 'https://cdn-icons-png.flaticon.com/512/6686/6686706.png', 
                 iconSize: [40, 40], // Kích thước của logo
                 iconAnchor: [20, 40], // Vị trí của logo
                 popupAnchor: [1, -34] // Vị trí của popup
@@ -212,15 +243,17 @@ var mapOptions = {
             
             marker.setIcon(icon);
             marker.addTo(map);
+
+            
       // ❌ Popup KHÔNG chứa hình ảnh
-      var popupContent = `
-        <div data-location-id="${location.id}">
-          <h3 style="margin: 5px 0;">${location.name}</h3>
-          <p style="margin: 5px 0; font-size: 16px;">Đánh giá: ${getStarRating(location.rating)} (${location.rating}/5)</p>
-          <p style="margin: 5px 0; font-size: 14px;">⏰ Giờ mở cửa: <b>${location.openHours}</b></p>
-        </div>
-      `;
-      marker.bindPopup(popupContent);
+      // var popupContent = `
+      //   <div data-location-id="${location.id}">
+      //     <h3 style="margin: 5px 0;">${location.name}</h3>
+      //     <p style="margin: 5px 0; font-size: 16px;">Đánh giá: ${getStarRating(location.rating)} (${location.rating}/5)</p>
+      //     <p style="margin: 5px 0; font-size: 14px;">⏰ Giờ mở cửa: <b>${location.openHours}</b></p>
+      //   </div>
+      // `;
+      //marker.bindPopup(popupContent);
       
       marker.on("mouseover", function() { 
         this.openPopup();
@@ -286,96 +319,7 @@ var mapOptions = {
         showInfoPanel();
       });
     });
-*/
 
-let userLat, userLon;
-
-navigator.geolocation.getCurrentPosition(function (position) {
-    userLat = position.coords.latitude;
-    userLon = position.coords.longitude;
-    var userLocation = L.marker([userLat, userLon]).addTo(map);
-    userLocation.setIcon(userIcon);
-    userLocation.addTo(map);
-    userLocation.bindPopup("Vị trí của bạn").openPopup();
-    map.setView([userLat, userLon], 15);
-    FetchLocation(userLat, userLon);
-}, function (error) {
-    console.error("Không thể lấy vị trí của bạn:", error);
-    FetchLocation(10.04501, 105.78088);
-});
-
-async function FetchLocation(Lat, Lon) {
-    try {
-        
-        fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Lỗi khi lấy dữ liệu từ API");
-            }
-            return response.json();
-        })
-        .then(data=>{
-          if(!Array.isArray(data)){
-            console.error("Dữ liệu API không hợp lệ:", data);
-            return;
-          }
-          data.forEach(location => {
-            const lat = parseFloat(location.latitude);
-            const lon = parseFloat(location.longitude);
-
-            var marker = L.marker([lat, lon], ).addTo(map);
-            marker.setIcon(icon);
-            marker.addTo(map);
-            var popupContent = `
-                <div>
-                    <h3>${location.name}</h3>
-                    <p>📍 ${location.address}</p>
-                    <p>📞 ${location.phone}</p>
-                    <p>📏 Cách bạn: <b>${location.distance} km</b></p>
-                </div>
-            `;
-            marker.bindPopup(popupContent);
-
-            marker.on("click", function () {
-
-                document.getElementById("info-content").innerHTML = `
-                    <div>
-                        <h3>${location.name}</h3>
-                        <p><strong>📍 Địa chỉ:</strong> ${location.address}</p>
-                        <p><strong>📞 Điện thoại:</strong> ${location.phone}</p>
-                        <p><strong>📏 Khoảng cách:</strong> ${location.distance} km</p>
-                        <button onclick="showRoute(${Lat}, ${Lon}, ${lat}, ${lon})">🚗 Chỉ đường</button>
-                    </div>
-                `;
-                showInfoPanel();
-            });
-          });
-        })
-
-    } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
-    }
-}
-
-var currentRoute = null;
-// Hàm hiển thị đường đi
-function showRoute(userLat, userLon, destLat, destLon) {
-  // Xóa tuyến đường cũ nếu có
-  if (currentRoute) {
-    map.removeControl(currentRoute);
-  }
-
-  // Tạo tuyến đường mới
-  currentRoute = L.Routing.control({
-    waypoints: [
-      L.latLng(userLat, userLon), // Vị trí của bạn
-      L.latLng(destLat, destLon) // Trạm xăng được click
-    ],
-    routeWhileDragging: true
-  }).addTo(map);
-}
-
-FetchLocation();
     document.getElementById("close-btn").addEventListener("click", hideInfoPanel);
 
 
@@ -397,6 +341,37 @@ FetchLocation();
 
     // Khi nhấn vào nút đóng, ẩn form
     document.getElementById("nav-close-btn").addEventListener("click", hideNavForm);
+
+
+    //PHẦN ĐĂNG NHẬP, ĐĂNG XUẤT, POPUP AVATAR NGƯỜI DÙNG
+    document.addEventListener("DOMContentLoaded", function () {
+    const avatar = document.getElementById("user-avatar");
+    const popup = document.getElementById("popup_avatar");
+
+    // Toggle hiển thị popup khi nhấn avatar
+    avatar.addEventListener("click", function (event) {
+        popup.classList.toggle("show");
+        event.stopPropagation(); // Ngăn chặn sự kiện lan ra ngoài
+    });
+
+    // Ẩn popup khi nhấn bên ngoài
+    document.addEventListener("click", function (event) {
+        if (!avatar.contains(event.target) && !popup.contains(event.target)) {
+            popup.classList.remove("show");
+        }
+    });
+
+    // Xử lý đăng nhập (có thể thay đổi logic)
+    document.getElementById("login-btn").addEventListener("click", function () {
+        alert("Chức năng đăng nhập!");
+    });
+
+    // Xử lý đăng xuất (có thể thay đổi logic)
+    document.getElementById("logout-btn").addEventListener("click", function () {
+        alert("Đã đăng xuất!");
+    });
+});
+
 
 
   </script>
