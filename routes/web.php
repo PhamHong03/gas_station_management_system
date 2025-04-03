@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\FuelTypeController;
 use App\Http\Controllers\Admin\GasStationController;
 use App\Http\Controllers\Company\GasStationController as CompanyGasStationController;
 use App\Http\Controllers\Admin\GasStationFuelController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Company\GasStationFuelController as CompanyGasStationFuelController;
 use App\Http\Controllers\Company\PriceController as CpnPriceController;
 use App\Http\Controllers\Company\CompanyController as CompanyCompanyController;
@@ -28,6 +29,10 @@ Route::post('/login', [AuthController::class, 'auth']);
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/register', [AuthController::class, 'registerStore']);
 Route::get('/register', [AuthController::class, 'register'])->name('register');
+
+//Review
+
+Route::post('/review/{id}', [ReviewController::class , 'store'])->name('review');
 
 Route::get('/gas-station/FindGas',[Gas::class,'findNearestGasStations']);
 Route::get('/gas-station/FindBy',[Gas::class,'findGasStationsByLocation']);
