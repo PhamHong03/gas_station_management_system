@@ -4,48 +4,42 @@ namespace App\Http\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Http\Requests\GasStation\GasStationRequest;
+use App\Models\GasStation;
+use App\Models\GasStationFuel;
+
 
 class GasStationServices{
-    public function findNear() {
-        // $request->validate([
-        //     'latitude' => 'required|numeric',
-        //     'longitude' => 'required|numeric',
-        //     'radius' => 'nullable|numeric|min:0' // Bán kính tìm kiếm (km), mặc định 5km
-        // ]);
-
-        $latitude = 10.046516764552752;
-        $longitude = 105.77850438052799;
-        $radius = 5; // Bán kính mặc định là 5km
+    public function findNear(GasStationRequest $request) {
+  
+        $validatedData = $request->validated();
+        $latitude = $validatedData['latitude'];
+        $longitude = $validatedData['longitude'];
+        $radius = $validatedData['radius'] ?? 5; // Bán kính mặc định
+        $fuelType = $validatedData['fuel_type'] ?? null;
+        $operationTime = $validatedData['operating_hours'] ?? null;
         
-        $gasStations = DB::table('gas_stations')
-            ->selectRaw("
-            id, name, address, phone, longitude, latitude,
-            (6371 * acos(cos(radians(?)) * cos(radians(latitude)) 
-            * cos(radians(longitude) - radians(?)) + sin(radians(?)) 
-            * sin(radians(latitude)))) AS distance
-        ", [$latitude, $longitude, $latitude])
-            ->having('distance', '<=', $radius)
-            ->orderBy('distance', 'asc')
-            ->get();
+       $query = DB::table('gas_stations as g')
+        ->join('gastation_fuel_type as gf', 'g.id', '=', 'gf.GasStationId')
+        ->selectRaw("
+            DISTINCT g.id, g.name, g.address, g.phone, g.longitude, g.latitude, g.operation_time,
+            (6371 * ACOS(
+                COS(RADIANS(?)) * COS(RADIANS(g.latitude)) 
+                * COS(RADIANS(g.longitude) - RADIANS(?)) 
+                + SIN(RADIANS(?)) * SIN(RADIANS(g.latitude))
+            )) AS distance", [$latitude, $longitude, $latitude])
+        ->having('distance', '<=', $radius)
+        ->orderBy('distance', 'asc');
 
+        // Áp dụng điều kiện lọc nếu có
+        if ($fuelType) {
+            $query->where('gf.FuelTypeId', $fuelType);
+        }
 
-        echo ($gasStations);
-        return response()->json($gasStations, 200, [], JSON_UNESCAPED_UNICODE);
+       
 
-    }
-    public function findNearByRadius() {
-
-        $query = '
-        [out:json];
-        way(around:500, 10.776, 106.700)["highway"];
-        (._;>;);
-        out;
-        ';
-        
-        $response = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])
-                        ->post('https://overpass-api.de/api/interpreter', $query);
-        
-       return $response->json();
-        
+        $gasStations = $query->get();
+    
+        return response()->json($gasStations, 200, ['Content-Type' => 'application/json'], JSON_UNESCAPED_UNICODE);
     }
 }

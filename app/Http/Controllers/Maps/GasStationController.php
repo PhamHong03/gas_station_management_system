@@ -22,8 +22,6 @@ class GasStationController extends Controller {
 
     public function findNearestGasStations(GasStationRequest $request)
     {
-        $this->gasStationServices->findNear($request);
-
-        return ;
+        return $this->gasStationServices->findNear($request);
     }
 }

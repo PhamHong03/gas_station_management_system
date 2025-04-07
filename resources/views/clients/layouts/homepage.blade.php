@@ -178,7 +178,7 @@ var mapOptions = {
           { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." },
           { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." }
       ]
-      }
+      });
     ];
     */
     function getStarRating(rating) {
@@ -304,7 +304,7 @@ navigator.geolocation.getCurrentPosition(function (position) {
     FetchLocation(10.04501, 105.78088);
 });
 
-async function FetchLocation(Lat, Lon) {
+/*async function FetchLocation(Lat, Lon) {
     try {
         
         fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
@@ -356,6 +356,7 @@ async function FetchLocation(Lat, Lon) {
         console.error("Lỗi khi lấy dữ liệu:", error);
     }
 }
+*/
 
 var currentRoute = null;
 // Hàm hiển thị đường đi
@@ -375,7 +376,6 @@ function showRoute(userLat, userLon, destLat, destLon) {
   }).addTo(map);
 }
 
-FetchLocation();
     document.getElementById("close-btn").addEventListener("click", hideInfoPanel);
 
 
