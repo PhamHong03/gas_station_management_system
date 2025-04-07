@@ -21,9 +21,13 @@ class GasStation extends Model {
     public function ward() {
         return $this->belongsTo(Ward::class, 'WardId', 'id');
     }
-    public function review() {
+    // public function review() { //đổi cái tên reviews nè
+    //     return $this->hasMany(Review::class, 'GasStationId', 'id');
+    // }
+    public function reviews() {
         return $this->hasMany(Review::class, 'GasStationId', 'id');
     }
+
     public function gasStationFuel() {
         return $this->hasMany(GasStationFuel::class, 'GasStationId', 'id');
     }

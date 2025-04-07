@@ -33,7 +33,9 @@ Route::get('/register', [AuthController::class, 'register'])->name('register');
 
 // Review
 
-Route::post('/review/{id}', [ReviewController::class, 'store'])->name('user.review');
+// Route::post('/reviews/{id}', [ReviewController::class, 'store'])->name('user.review');
+Route::post('/reviews/store', [App\Http\Controllers\Maps\ReviewController::class, 'store'])->name('reviews.store');
+
 
 Route::get('/gas-station/FindGas', [Gas::class, 'findNearestGasStations']);
 Route::get('/gas-station/FindBy', [Gas::class, 'findGasStationsByLocation']);
