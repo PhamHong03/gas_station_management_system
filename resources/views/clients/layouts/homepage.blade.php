@@ -3,7 +3,7 @@
 <body>
     <!-- Map Container -->
     <div id="user-avatar">
-        <img src="https://i.pravatar.cc/1" alt="User Avatar">
+        <img src="storage/gas_station/avatar.jpg" alt="User Avatar">
     </div>
     <!-- người dùng -->
     <div id="popup_avatar">
@@ -11,7 +11,7 @@
             <p><strong>{{ Auth::user()->name }}</strong></p>
             <p>Email: {{ Auth::user()->email }}</p>
             <!-- Hide "Đăng nhập" if logged in -->
-            <a href="{{ route('logout') }}" method="POST" id="logout-form">Đăng Xuất</a>
+            <a href="{{ route('logout') }}" method="POST" class="popup-item" id="logout-form">Đăng Xuất</a>
         @else
             <!-- Show "Đăng nhập" if not logged in -->
             <a href="{{ route('login') }}" class="popup-item" id="login-btn">Đăng nhập</a>
@@ -20,11 +20,11 @@
     <div id="map">
         <div id="search-box">
             <input type="text" id="search-input" placeholder="Nhập địa chỉ...">
-            <button id="search-btn">🔍</button>
+            <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
             <i id="nav-icon" class="fa-solid fa-diamond-turn-right"></i>
         </div>
         <div id="navigation-form">
-            <button id="nav-close-btn">❌</button>
+            <button id="nav-close-btn"><i class="fa-solid fa-xmark" style="color: #a50000;"></i></button>
             <input type="text" id="start-location" placeholder="Nhập điểm xuất phát...">
             <input type="text" id="end-location" placeholder="Nhập điểm đến...">
             <div id="selectnavigationandnumber">
@@ -33,7 +33,9 @@
                     <!-- Các option sẽ được thêm vào sau khi gọi hàm -->
                 </select>
                 <input type="text" id="number-location" placeholder="Nhập khoảng cách...">
-                <button id="find-route-btn">Tìm đường</button>
+            </div>
+            <div class="find-route-btn-div">
+                <button id="find-route-btn" class="btn-form">Tìm đường</button>
             </div>
         </div>
     </div>
@@ -46,60 +48,36 @@
     </div>
     <!-- Panel Thông tin bên trái -->
     <div id="info-panel">
-        <button id="close-btn">❌</button>
+        <button id="close-btn"><i class="fa-solid fa-xmark" style="color: #a50000;"></i></button>
+        <div id="overview-image">
+            <img src="" alt="" id="location-image"
+                style="max-width:100%; height:auto; display:block; margin:0 auto;">
+        </div>
         <div id="info-content">
             <!-- Tab 1: Tổng Quan -->
             <div class="tab-panel active" id="overview">
-                <div id="overview-image">
-                    <img src="" alt="" id="location-image"
-                        style="max-width:100%; height:auto; display:block; margin:0 auto;">
+                <div>
+                    <h3 id="location-name"></h3>
+                    <p><strong><i class="fa-solid fa-location-dot" style="color: #0091ff;"></i> Địa chỉ:</strong> <span id="location-address"></span></p>
+                    <p><strong><i class="fa-solid fa-clock" style="color: #0091ff;"></i> Giờ hoạt động:</strong> <span id="operation-time"></span></p>
+                    <p><strong><i class="fa-solid fa-phone" style="color: #0091ff;"></i> Điện thoại:</strong> <span id="location-phone"></span></p>
+                    <p><strong><i class="fa-solid fa-ruler" style="color: #0091ff;"></i> Khoảng cách:</strong> <span id="location-distance"></span></p>
+                    <div class="button-container">
+                        <button id="btn-route" class="button-container" onclick="showRoute()"><i class="fa-solid fa-route"></i> Chỉ đường</button>
+                    </div>
                 </div>
-                <h3 id="location-name"></h3>
-                <p><strong>📍 Địa chỉ:</strong> <span id="location-address"></span></p>
-                <p><strong>⏰ Giờ hoạt động:</strong> <span id="operation-time"></span></p>
-                <p><strong>📞 Điện thoại:</strong> <span id="location-phone"></span></p>
-                <p><strong>📏 Khoảng cách:</strong> <span id="location-distance"></span></p>
-                <button id="btn-route" onclick="showRoute()">🚗 Chỉ đường</button>
             </div>
             <!-- Bài Đánh Giá -->
             <div id="reviews-section">
-                <h4>📢 Đánh giá của khách hàng:</h4>
-                <div id="reviews-list"></div>
-                <h3>Thêm Đánh Giá</h3>
-                <button id="btnOpenReviewPopup">Thêm đánh giá</button>
+                <h4>Đánh giá của khách hàng:</h4>
+                <div id="reviews-list">
+                    <p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>
+                </div>
+                <div class="button-container"><button id="btnOpenReviewPopup"><i class="fa-solid fa-pen"></i>   Thêm đánh giá</button>
+                </div>
             </div>
         </div>
     </div>
-    {{-- <div id="reviewPopupContainer" class="review-popup">
-        <div class="review-popup-content">
-            <div class="review-popup-header">
-                <h2 class="review-popup-title">Chợ nổi Cái Răng</h2>
-            </div>
-            <div class="review-user-info">
-                <div class="review-user-avatar">
-                    <span class="review-avatar-letter">N</span>
-                </div>
-                <div class="review-user-details">
-                    <strong class="review-user-name">Ngoc Thao Nguyen</strong>
-                </div>
-            </div>
-            <div class="review-rating">
-                <span class="review-star">&#9734;</span>
-                <span class="review-star">&#9734;</span>
-                <span class="review-star">&#9734;</span>
-                <span class="review-star">&#9734;</span>
-                <span class="review-star">&#9734;</span>
-            </div>
-            <input type="text" class="review-textarea"
-                placeholder="Mô tả cụ thể trải nghiệm của bạn tại địa điểm này">
-            <div class="review-popup-buttons">
-                <button id="btnCancelReview" class="review-cancel-button">Huỷ</button>
-                <button id="btnSubmitReview" class="review-submit-button">Đăng</button>
-            </div>
-        </div>
-    </div> --}}
-
-
     <div id="reviewPopupContainer" class="review-popup">
         <div class="review-popup-content">
             <div class="review-popup-header">
@@ -222,11 +200,11 @@
             const popupContent = `
             <div>
                 <h3>${location.name}</h3>
-                <p>📍 ${location.address}</p>
-                <p>📞 ${location.phone}</p>
-                <p>📏 Cách bạn: <b>${location.distance} km</b></p>
-                <p>🕒 Thời gian hoạt động: ${location.operation_time}</p>
-                <p>⭐ Đánh giá: ${averageRating.toFixed(1)}/5</p>
+                <p><i class="fa-solid fa-location-dot" style="color: #0091ff;"></i> ${location.address}</p>
+                <p><i class="fa-solid fa-phone" style="color: #0091ff;"></i> ${location.phone}</p>
+                <p><i class="fa-solid fa-ruler" style="color: #0091ff;"></i> Cách bạn: <b>${location.distance} km</b></p>
+                <p><i class="fa-solid fa-clock" style="color: #0091ff;"></i> Thời gian hoạt động: ${location.operation_time}</p>
+                <p><i class="fa-solid fa-star" style="color: #FFD43B;"></i> Đánh giá: ${averageRating.toFixed(1)}/5</p>
             </div>
         `;
             marker.bindPopup(popupContent);
@@ -253,7 +231,7 @@
                     location.reviews.forEach(review => {
                         reviewsHtml += `
                         <div class="review-item">
-                            <p><strong>${review.name || 'Ẩn danh'}</strong> - ⭐ ${review.rating}/5</p>
+                            <p><strong>${review.name || 'Ẩn danh'}</strong> - <i class="fa-solid fa-star" style="color: #FFD43B;"></i> ${review.rating}/5</p>
                             <p>💬 ${review.comment}</p>
                         </div>
                     `;
@@ -444,7 +422,7 @@
 
 </html>
 
-    // let userLat, userLon;
+    {{-- // let userLat, userLon;
     // navigator.geolocation.getCurrentPosition(function (position) {
     // userLat = position.coords.latitude;
     // userLon = position.coords.longitude;
@@ -652,4 +630,4 @@
     // console.error("Lỗi khi lấy dữ liệu:", error);
     // }
     // }
-    // FetchLocation();
+    // FetchLocation(); --}}
