@@ -3,14 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
     public function store(Request $request)
     {
         try {
-            if (!Auth::check()) {
+            if (! Auth::check()) {
                 return response()->json(['success' => false, 'message' => 'Bạn cần đăng nhập để đánh giá!'], 401);
             }
 
@@ -29,7 +31,7 @@ class ReviewController extends Controller
 
             return response()->json(['success' => true, 'message' => 'Đánh giá đã được gửi thành công!']);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Có lỗi xảy ra: ' . $e->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => 'Có lỗi xảy ra: '.$e->getMessage()], 500);
         }
     }
 }

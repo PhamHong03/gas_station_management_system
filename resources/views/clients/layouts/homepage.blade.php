@@ -30,6 +30,9 @@
             <div id="selectnavigationandnumber">
                 <select id="fueltypes-form">
                     <option value="">Chọn loại xăng</option>
+                    @foreach ($fuelTypes as $item)
+                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                    @endforeach
                     <!-- Các option sẽ được thêm vào sau khi gọi hàm -->
                 </select>
                 <input type="text" id="number-location" placeholder="Nhập khoảng cách...">
@@ -58,12 +61,17 @@
             <div class="tab-panel active" id="overview">
                 <div>
                     <h3 id="location-name"></h3>
-                    <p><strong><i class="fa-solid fa-location-dot" style="color: #0091ff;"></i> Địa chỉ:</strong> <span id="location-address"></span></p>
-                    <p><strong><i class="fa-solid fa-clock" style="color: #0091ff;"></i> Giờ hoạt động:</strong> <span id="operation-time"></span></p>
-                    <p><strong><i class="fa-solid fa-phone" style="color: #0091ff;"></i> Điện thoại:</strong> <span id="location-phone"></span></p>
-                    <p><strong><i class="fa-solid fa-ruler" style="color: #0091ff;"></i> Khoảng cách:</strong> <span id="location-distance"></span></p>
+                    <p><strong><i class="fa-solid fa-location-dot" style="color: #0091ff;"></i> Địa chỉ:</strong> <span
+                            id="location-address"></span></p>
+                    <p><strong><i class="fa-solid fa-clock" style="color: #0091ff;"></i> Giờ hoạt động:</strong> <span
+                            id="operation-time"></span></p>
+                    <p><strong><i class="fa-solid fa-phone" style="color: #0091ff;"></i> Điện thoại:</strong> <span
+                            id="location-phone"></span></p>
+                    <p><strong><i class="fa-solid fa-ruler" style="color: #0091ff;"></i> Khoảng cách:</strong> <span
+                            id="location-distance"></span></p>
                     <div class="button-container">
-                        <button id="btn-route" class="button-container" onclick="showRoute()"><i class="fa-solid fa-route"></i> Chỉ đường</button>
+                        <button id="btn-route" class="button-container" onclick="showRoute()"><i
+                                class="fa-solid fa-route"></i> Chỉ đường</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +81,8 @@
                 <div id="reviews-list">
                     <p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>
                 </div>
-                <div class="button-container"><button id="btnOpenReviewPopup"><i class="fa-solid fa-pen"></i>   Thêm đánh giá</button>
+                <div class="button-container"><button id="btnOpenReviewPopup"><i class="fa-solid fa-pen"></i> Thêm đánh
+                        giá</button>
                 </div>
             </div>
         </div>
@@ -422,212 +431,212 @@
 
 </html>
 
-    // let userLat, userLon;
-    // navigator.geolocation.getCurrentPosition(function (position) {
-    // userLat = position.coords.latitude;
-    // userLon = position.coords.longitude;
-    // var userLocation = L.marker([userLat, userLon]).addTo(map);
-    // userLocation.setIcon(userIcon);
-    // userLocation.addTo(map);
-    // userLocation.bindPopup("Vị trí của bạn").openPopup();
-    // map.setView([userLat, userLon], 15);
-    // FetchLocation(userLat, userLon);
-    // }, function (error) {
-    // console.error("Không thể lấy vị trí của bạn:", error);
-    // FetchLocation(10.04501, 105.78088);
-    // });
+// let userLat, userLon;
+// navigator.geolocation.getCurrentPosition(function (position) {
+// userLat = position.coords.latitude;
+// userLon = position.coords.longitude;
+// var userLocation = L.marker([userLat, userLon]).addTo(map);
+// userLocation.setIcon(userIcon);
+// userLocation.addTo(map);
+// userLocation.bindPopup("Vị trí của bạn").openPopup();
+// map.setView([userLat, userLon], 15);
+// FetchLocation(userLat, userLon);
+// }, function (error) {
+// console.error("Không thể lấy vị trí của bạn:", error);
+// FetchLocation(10.04501, 105.78088);
+// });
 
 
 
 
-    // async function FetchLocation(Lat, Lon) {
-    // try {
-    // fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
-    // .then(response => {
-    // if (!response.ok) {
-    // throw new Error("Lỗi khi lấy dữ liệu từ API");
-    // }
-    // return response.json();
-    // })
-    // .then(data => {
-    // console.log(data); // Thêm dòng này để kiểm tra dữ liệu trả về từ API
-    // if (!Array.isArray(data)) {
-    // console.error("Dữ liệu API không hợp lệ:", data);
-    // return;
-    // }
+// async function FetchLocation(Lat, Lon) {
+// try {
+// fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
+// .then(response => {
+// if (!response.ok) {
+// throw new Error("Lỗi khi lấy dữ liệu từ API");
+// }
+// return response.json();
+// })
+// .then(data => {
+// console.log(data); // Thêm dòng này để kiểm tra dữ liệu trả về từ API
+// if (!Array.isArray(data)) {
+// console.error("Dữ liệu API không hợp lệ:", data);
+// return;
+// }
 
-    // data.forEach(location => {
-    // const lat = parseFloat(location.latitude);
-    // const lon = parseFloat(location.longitude);
+// data.forEach(location => {
+// const lat = parseFloat(location.latitude);
+// const lon = parseFloat(location.longitude);
 
-    // var marker = L.marker([lat, lon]).addTo(map);
-    // marker.setIcon(icon);
-    // marker.addTo(map);
+// var marker = L.marker([lat, lon]).addTo(map);
+// marker.setIcon(icon);
+// marker.addTo(map);
 
-    // var popupContent = `
-    // <div>
-        // <h3>${location.name}</h3>
-        // <p>📍 ${location.address}</p>
-        // <p>📞 ${location.phone}</p>
-        // <p>📏 Cách bạn: <b>${location.distance} km</b></p>
-        // </div>
-    // `;
-    // marker.bindPopup(popupContent);
+// var popupContent = `
+// <div>
+    // <h3>${location.name}</h3>
+    // <p>📍 ${location.address}</p>
+    // <p>📞 ${location.phone}</p>
+    // <p>📏 Cách bạn: <b>${location.distance} km</b></p>
+    // </div>
+// `;
+// marker.bindPopup(popupContent);
 
-    // // Khi click vào marker, cập nhật nội dung cho panel bên trái
-    // marker.on("click", function () {
+// // Khi click vào marker, cập nhật nội dung cho panel bên trái
+// marker.on("click", function () {
 
-    // // Cập nhật thông tin trong panel bên trái
-    // document.getElementById("location-image").src = location.image;
-    // document.getElementById("location-name").textContent = location.name;
-    // document.getElementById("location-address").textContent = location.address;
-    // document.getElementById("operation-time").textContent = location.operation_time;
-    // document.getElementById("location-phone").textContent = location.phone;
-    // document.getElementById("location-distance").textContent = `${location.distance} km`;
-    // document.getElementById("btn-route").onclick = function() {
-    // showRoute(Lat, Lon, lat, lon);
-    // };
-    // // Cập nhật phần đánh giá
-    // let reviewsHtml = '';
-    // if (location.reviews && location.reviews.length > 0) {
-    // location.reviews.forEach(review => {
-    // reviewsHtml += `
-    // <div class="review-item">
-        // <p><strong>${review.name || 'Ẩn danh'}</strong> - ⭐ ${review.rating}/5</p>
-        // <p>💬 ${review.comment}</p>
-        // </div>
-    // `;
-    // });
-    // } else {
-    // reviewsHtml = "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>";
-    // }
-    // document.getElementById("reviews-list").innerHTML = reviewsHtml;
+// // Cập nhật thông tin trong panel bên trái
+// document.getElementById("location-image").src = location.image;
+// document.getElementById("location-name").textContent = location.name;
+// document.getElementById("location-address").textContent = location.address;
+// document.getElementById("operation-time").textContent = location.operation_time;
+// document.getElementById("location-phone").textContent = location.phone;
+// document.getElementById("location-distance").textContent = `${location.distance} km`;
+// document.getElementById("btn-route").onclick = function() {
+// showRoute(Lat, Lon, lat, lon);
+// };
+// // Cập nhật phần đánh giá
+// let reviewsHtml = '';
+// if (location.reviews && location.reviews.length > 0) {
+// location.reviews.forEach(review => {
+// reviewsHtml += `
+// <div class="review-item">
+    // <p><strong>${review.name || 'Ẩn danh'}</strong> - ⭐ ${review.rating}/5</p>
+    // <p>💬 ${review.comment}</p>
+    // </div>
+// `;
+// });
+// } else {
+// reviewsHtml = "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>";
+// }
+// document.getElementById("reviews-list").innerHTML = reviewsHtml;
 
-    // // Hiển thị panel bên trái
-    // showInfoPanel();
-    // });
-    // });
-    // });
+// // Hiển thị panel bên trái
+// showInfoPanel();
+// });
+// });
+// });
 
-    // } catch (error) {
-    // console.error("Lỗi khi lấy dữ liệu:", error);
-    // }
-    // }
+// } catch (error) {
+// console.error("Lỗi khi lấy dữ liệu:", error);
+// }
+// }
 
-    // async function FetchLocation(Lat, Lon) {
-    // try {
-    // fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
-    // .then(response => {
-    // if (!response.ok) {
-    // throw new Error("Lỗi khi lấy dữ liệu từ API");
-    // }
-    // return response.json();
-    // })
-    // .then(data => {
-    // if (!Array.isArray(data)) {
-    // console.error("Dữ liệu API không hợp lệ:", data);
-    // return;
-    // }
+// async function FetchLocation(Lat, Lon) {
+// try {
+// fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
+// .then(response => {
+// if (!response.ok) {
+// throw new Error("Lỗi khi lấy dữ liệu từ API");
+// }
+// return response.json();
+// })
+// .then(data => {
+// if (!Array.isArray(data)) {
+// console.error("Dữ liệu API không hợp lệ:", data);
+// return;
+// }
 
-    // data.forEach(location => {
-    // const lat = parseFloat(location.latitude);
-    // const lon = parseFloat(location.longitude);
+// data.forEach(location => {
+// const lat = parseFloat(location.latitude);
+// const lon = parseFloat(location.longitude);
 
-    // var marker = L.marker([lat, lon]).addTo(map);
-    // marker.setIcon(icon);
-    // marker.addTo(map);
+// var marker = L.marker([lat, lon]).addTo(map);
+// marker.setIcon(icon);
+// marker.addTo(map);
 
-    // var popupContent = `
-    // <div>
-        // <h3>${location.name}</h3>
-        // <p>📍 ${location.address}</p>
-        // <p>📞 ${location.phone}</p>
-        // <p>📏 Cách bạn: <b>${location.distance} km</b></p>
-        // </div>
-    // `;
-    // marker.bindPopup(popupContent);
+// var popupContent = `
+// <div>
+    // <h3>${location.name}</h3>
+    // <p>📍 ${location.address}</p>
+    // <p>📞 ${location.phone}</p>
+    // <p>📏 Cách bạn: <b>${location.distance} km</b></p>
+    // </div>
+// `;
+// marker.bindPopup(popupContent);
 
-    // // Khi click vào marker, cập nhật nội dung cho panel bên trái
-    // marker.on("click", function () {
-    // document.getElementById("info-content").innerHTML = `
-    // <div class="tab-panel active" id="overview">
-        // <img src="${location.image}" alt="${location.name}"
-            style="max-width:100%; height:auto; display:block; margin:0 auto;">
-        // <h3>${location.name}</h3>
-        // <p><strong>📍 Địa chỉ:</strong> ${location.address}</p>
-        // <p><strong>⏰ Giờ hoạt động:</strong> ${location.operation_time}</p>
-        // <p><strong>📞 Điện thoại:</strong> ${location.phone}</p>
-        // <p><strong>📏 Khoảng cách:</strong> ${location.distance} km</p>
-        // <button id="btn-route" onclick="showRoute(${Lat}, ${Lon}, ${lat}, ${lon})">🚗 Chỉ đường</button>
+// // Khi click vào marker, cập nhật nội dung cho panel bên trái
+// marker.on("click", function () {
+// document.getElementById("info-content").innerHTML = `
+// <div class="tab-panel active" id="overview">
+    // <img src="${location.image}" alt="${location.name}"
+        style="max-width:100%; height:auto; display:block; margin:0 auto;">
+    // <h3>${location.name}</h3>
+    // <p><strong>📍 Địa chỉ:</strong> ${location.address}</p>
+    // <p><strong>⏰ Giờ hoạt động:</strong> ${location.operation_time}</p>
+    // <p><strong>📞 Điện thoại:</strong> ${location.phone}</p>
+    // <p><strong>📏 Khoảng cách:</strong> ${location.distance} km</p>
+    // <button id="btn-route" onclick="showRoute(${Lat}, ${Lon}, ${lat}, ${lon})">🚗 Chỉ đường</button>
 
-        // <div id="reviews">
-            // <p><strong>⭐ Đánh giá trung bình:</strong> ${location.rating ?? 'Chưa có đánh giá'}</p>
-            // <h4>📢 Đánh giá của khách hàng:</h4>
-            // <div class="reviews">
-                // ${location.reviews && location.reviews.length > 0
-                // ? location.reviews.map(review => `
-                // <div class="review-item">
-                    // <p><strong>${review.name || 'Ẩn danh'}</strong> - ⭐ ${review.rating}/5</p>
-                    // <p>💬 ${review.comment}</p>
-                    // </div>
-                // `).join('')
-                // : "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>"
-                // }
+    // <div id="reviews">
+        // <p><strong>⭐ Đánh giá trung bình:</strong> ${location.rating ?? 'Chưa có đánh giá'}</p>
+        // <h4>📢 Đánh giá của khách hàng:</h4>
+        // <div class="reviews">
+            // ${location.reviews && location.reviews.length > 0
+            // ? location.reviews.map(review => `
+            // <div class="review-item">
+                // <p><strong>${review.name || 'Ẩn danh'}</strong> - ⭐ ${review.rating}/5</p>
+                // <p>💬 ${review.comment}</p>
                 // </div>
+            // `).join('')
+            // : "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>"
+            // }
             // </div>
         // </div>
-    // `;
+    // </div>
+// `;
 
-    // // Gọi hàm hiển thị panel bên trái
-    // showInfoPanel();
-    // });
-    // });
-    // });
+// // Gọi hàm hiển thị panel bên trái
+// showInfoPanel();
+// });
+// });
+// });
 
-    // } catch (error) {
-    // console.error("Lỗi khi lấy dữ liệu:", error);
-    // }
-    // }
+// } catch (error) {
+// console.error("Lỗi khi lấy dữ liệu:", error);
+// }
+// }
 
 
-    // async function FetchLocation(Lat, Lon) {
-    // try {
-    // const response = await fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`);
+// async function FetchLocation(Lat, Lon) {
+// try {
+// const response = await fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`);
 
-    // if (!response.ok) {
-    // throw new Error("Lỗi khi lấy dữ liệu từ API");
-    // }
+// if (!response.ok) {
+// throw new Error("Lỗi khi lấy dữ liệu từ API");
+// }
 
-    // const data = await response.json();
-    // if (!Array.isArray(data)) {
-    // console.error("Dữ liệu API không hợp lệ:", data);
-    // return;
-    // }
+// const data = await response.json();
+// if (!Array.isArray(data)) {
+// console.error("Dữ liệu API không hợp lệ:", data);
+// return;
+// }
 
-    // data.forEach(location => {
-    // const lat = parseFloat(location.latitude);
-    // const lon = parseFloat(location.longitude);
+// data.forEach(location => {
+// const lat = parseFloat(location.latitude);
+// const lon = parseFloat(location.longitude);
 
-    // if (!isNaN(lat) && !isNaN(lon)) {
-    // const marker = L.marker([lat, lon]).addTo(map);
-    // marker.setIcon(icon); // Kiểm tra nếu bạn có icon
-    // marker.addTo(map);
+// if (!isNaN(lat) && !isNaN(lon)) {
+// const marker = L.marker([lat, lon]).addTo(map);
+// marker.setIcon(icon); // Kiểm tra nếu bạn có icon
+// marker.addTo(map);
 
-    // var popupContent = `
-    // <div>
-        // <h3>${location.name}</h3>
-        // <p>📍 ${location.address}</p>
-        // <p>📞 ${location.phone}</p>
-        // <p>📏 Cách bạn: <b>${location.distance} km</b></p>
-        // </div>
-    // `;
-    // marker.bindPopup(popupContent);
-    // } else {
-    // console.error('Tọa độ không hợp lệ:', location.latitude, location.longitude);
-    // }
-    // });
-    // } catch (error) {
-    // console.error("Lỗi khi lấy dữ liệu:", error);
-    // }
-    // }
-    // FetchLocation();
+// var popupContent = `
+// <div>
+    // <h3>${location.name}</h3>
+    // <p>📍 ${location.address}</p>
+    // <p>📞 ${location.phone}</p>
+    // <p>📏 Cách bạn: <b>${location.distance} km</b></p>
+    // </div>
+// `;
+// marker.bindPopup(popupContent);
+// } else {
+// console.error('Tọa độ không hợp lệ:', location.latitude, location.longitude);
+// }
+// });
+// } catch (error) {
+// console.error("Lỗi khi lấy dữ liệu:", error);
+// }
+// }
+// FetchLocation();
