@@ -65,13 +65,13 @@
                                 <div class="form-group">
                                     <label for="districtSelect">Quận/Huyện</label>
                                     <select class="form-select" id="districtSelect">
-                                        <option value="">Chọn Quận/Huyện</option>
+                                        <option value="{{ $ward->DistrictId }}">{{ $ward->district->name }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="wardSelect">Xã/Phường</label>
                                     <select name="WardId" class="form-select" id="wardSelect">
-                                        <option value="">Chọn Xã/Phường</option>
+                                        <option value="{{ $ward->id }}">{{ $ward->name }}</option>
                                     </select>
                                     @error('ward')
                                         <div class="ms-5 text-danger">{{ $message }}</div>
