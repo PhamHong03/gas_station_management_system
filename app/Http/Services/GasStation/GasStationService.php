@@ -87,4 +87,8 @@ class GasStationService
         return redirect()->back()->with('error', 'Xóa cây xăng thất bại');
     }
 
+    public function getAll(){
+        return GasStation::orderByDesc('id')->paginate(5);
+    }
+
 }
