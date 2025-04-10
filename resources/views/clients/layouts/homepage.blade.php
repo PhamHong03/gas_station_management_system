@@ -20,32 +20,41 @@
     <div id="map">
         <div id="search-box">
             <input type="text" id="search-input" placeholder="Nhập địa chỉ...">
-            <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button id="search-btn">🔍</button>
             <i id="nav-icon" class="fa-solid fa-diamond-turn-right"></i>
         </div>
         <div id="navigation-form">
-            <button id="nav-close-btn"><i class="fa-solid fa-xmark" style="color: #a50000;"></i></button>
-            <input type="text" id="start-location" placeholder="Nhập điểm xuất phát...">
-            <input type="text" id="end-location" placeholder="Nhập điểm đến...">
-            <div id="selectnavigationandnumber">
-                <select id="fueltypes-form">
-                    <option value="">Chọn loại xăng</option>
-                    @foreach ($fuelTypes as $item)
-                        <option value="{{ $item->id }}">{{ $item->name }}</option>
-                    @endforeach
-                    <!-- Các option sẽ được thêm vào sau khi gọi hàm -->
-                </select>
-                <select name="operation_time" id="operation-time">
-                    <option value="">Tất cả thời gian hoạt động</option>
-                    @foreach($operationTimes as $time)
-                        <option value="{{ $time }}">{{ $time }}</option>
-                    @endforeach
-                </select>
-                <input type="text" id="number-location" placeholder="Nhập khoảng cách...">
-            </div>
-            <div class="find-route-btn-div">
-                <button id="find-route-btn" class="btn-form">Tìm đường</button>
-            </div>
+            <button id="nav-close-btn">❌</button>
+            <h3>Chỉ đường</h3>
+            <form method="GET" action="{{ route('index') }}" id="search-form">
+                <div id="selectnavigationandnumber">
+                    <select id="fueltypes-form"  name="fuel_type">
+                        <option value="">Chọn loại xăng</option>
+                        @foreach ($fuelTypes as $item)
+                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                        @endforeach
+                        <!-- Các option sẽ được thêm vào sau khi gọi hàm -->
+                    </select>
+
+                    <select name="operation_time" id="operation-time">
+                        <option value="">Tất cả thời gian hoạt động</option>
+                        @foreach($operationTimes as $time)
+                            <option value="{{ $time }}" {{ request('operation_time') == $time ? 'selected' : '' }}>
+                                {{ $time }}
+                            </option>
+                        @endforeach
+                    </select>
+                        
+                    <input type="number" id="number-location" name="radius" placeholder="Nhập khoảng cách (km)..." min="1" max="100">
+                    
+                    <!-- Vị trí ẩn (lấy từ geolocation JS) -->
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    <input type="hidden" name="search" value="1">
+        
+                    <button type="submit" id="find-route-btn">Tìm đường</button>
+                </div>
+            </form>
         </div>
     </div>
     </div>
@@ -76,8 +85,7 @@
                     <p><strong><i class="fa-solid fa-ruler" style="color: #0091ff;"></i> Khoảng cách:</strong> <span
                             id="location-distance"></span></p>
                     <div class="button-container">
-                        <button id="btn-route" class="button-container" onclick="showRoute()"><i
-                                class="fa-solid fa-route"></i> Chỉ đường</button>
+                        <button id="btn-route">🚗 Chỉ đường</button>
                     </div>
                 </div>
             </div>
@@ -92,6 +100,7 @@
                 </div>
             </div>
         </div>
+        <button id="clear-route-btn" style="display: none;">❌ Ẩn đường đi</button>
     </div>
     <div id="reviewPopupContainer" class="review-popup">
         <div class="review-popup-content">
@@ -123,7 +132,24 @@
         </div>
     </div>
 
+    <script>
+        document.getElementById("clear-route-btn").addEventListener("click", function () {
+            if (currentRoute) {
+                map.removeControl(currentRoute);
+                currentRoute = null;
+            }
+            this.style.display = "none"; // Ẩn nút sau khi ẩn tuyến đường
+        });
 
+        window.onload = function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById("latitude").value = position.coords.latitude;
+                    document.getElementById("longitude").value = position.coords.longitude;
+                });
+            }
+        };
+    </script>
     <!-- Import Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Import Leaflet Geocoder JS -->
@@ -131,6 +157,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
     <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
     <script>
+
         var mapOptions = {
             center: [10.026667, 105.783333],
             zoom: 15
@@ -139,6 +166,22 @@
             iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
             shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
         });
+        let userLat, userLon;
+        navigator.geolocation.getCurrentPosition(function (position) {
+        userLat = position.coords.latitude;
+        userLon = position.coords.longitude;
+        var userLocation = L.marker([userLat, userLon]).addTo(map);
+        userLocation.setIcon(userIcon);
+        userLocation.addTo(map);
+        userLocation.bindPopup("Vị trí của bạn").openPopup();
+        map.setView([userLat, userLon], 15);
+        FetchLocation(userLat, userLon);
+        }, function (error) {
+        console.error("Không thể lấy vị trí của bạn:", error);
+        FetchLocation(10.04501, 105.78088);
+        });
+
+
         // Di chuyển bản đồ đến vị trí đó
         var map = new L.map("map", mapOptions);
         var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
@@ -256,6 +299,9 @@
                 }
                 document.getElementById("reviews-list").innerHTML = reviewsHtml;
 
+                document.getElementById("btn-route").onclick = function() {
+                showRoute(userLat, userLon, location.coords[0], location.coords[1]);
+                };
                 // Hiển thị panel bên trái (nếu cần)
                 showInfoPanel();
             });
@@ -383,17 +429,26 @@
         function showRoute(userLat, userLon, destLat, destLon) {
             // Xóa tuyến đường cũ nếu có
             if (currentRoute) {
-                map.removeControl(currentRoute);
-            }
+                    map.removeControl(currentRoute);
+                }
 
-            // Tạo tuyến đường mới
-            currentRoute = L.Routing.control({
-                waypoints: [
-                    L.latLng(userLat, userLon), // Vị trí của bạn
-                    L.latLng(destLat, destLon) // Trạm xăng được click
-                ],
-                routeWhileDragging: true
-            }).addTo(map);
+                // Tạo tuyến đường mới
+                currentRoute = L.Routing.control({
+                    waypoints: [
+                        L.latLng(userLat, userLon), // Vị trí của bạn
+                        L.latLng(destLat, destLon) // Trạm xăng được click
+                    ],
+                    routeWhileDragging: false,
+                        createMarker: function() {
+                        return null; // Không tạo marker cho các waypoint
+                    },
+                    lineOptions: {
+                        styles: [
+                            { color: 'blue', weight: 5, opacity: 0.8 }
+                        ]
+                     }
+                }).addTo(map);
+                document.getElementById("clear-route-btn").style.display = "inline-block";
         }
 
         // button navigation

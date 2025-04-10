@@ -116,10 +116,44 @@ h3{
 
 #selectnavigationandnumber {
     display: flex;
+    flex-direction: column; /* Sắp xếp theo chiều dọc */
+
     gap: 10px;
     /* Khoảng cách giữa các phần tử */
     margin-bottom: 15px;
 
+}
+
+#number-location{
+    flex-grow: 1;
+    /* Cho phép select chiếm không gian còn lại */
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    appearance: none;
+    /* Loại bỏ стили mặc định của trình duyệt */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+#operation-time{
+    flex-grow: 1;
+    /* Cho phép select chiếm không gian còn lại */
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    appearance: none;
+    /* Loại bỏ стили mặc định của trình duyệt */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 16px;
+    cursor: pointer;
 }
 
 #fueltypes-form {

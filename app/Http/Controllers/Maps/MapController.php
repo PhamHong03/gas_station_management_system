@@ -22,12 +22,21 @@ class MapController extends Controller
             ->whereNotNull('operation_time')
             ->where('operation_time', '!=', '')
             ->pluck('operation_time');
+
         if ($request->has('search')) {
             // Validate and process search
             $validatedRequest = app(\App\Http\Requests\GasStation\GasStationRequest::class);
             $gasStations = $this->findNearestGasStations($validatedRequest);
-            return view('clients.layouts.homepage', compact('gasStations'));
+            
+            // Trả về view với các giá trị đã chọn
+            return view('clients.layouts.homepage', [
+                'gasStations' => $gasStations,
+                'fuelTypes' => $fuelTypes,
+                'operationTimes' => $operationTimes,
+                'selectedTime' => $request->operation_time // Thêm giá trị đã chọn
+            ]);
         }
+
         return view('clients.layouts.homepage', compact('gasStations', 'fuelTypes', 'operationTimes'));
     }
     protected $gasStationServices;
