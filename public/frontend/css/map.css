@@ -1,335 +1,1155 @@
 /* Reset */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 /* Bản đồ */
 #map {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  transition: margin-left 0.3s ease-in-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    transition: margin-left 0.3s ease-in-out;
 }
 
 /* Khi mở panel, map bị đẩy sang phải */
 #map.expanded {
-  margin-left: 25%;
+    margin-left: 25%;
 }
 
 /* Ô tìm kiếm */
 #search-box {
-  position: fixed; /* Cố định vị trí */
-  top: 20px;
-  left: 55px;
-  display: flex;
-  align-items: center;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  width: 20%;
-  height: 40px;
-  z-index: 3000; /* Đảm bảo nằm trên panel */
+    position: fixed;
+    /* Cố định vị trí */
+    top: 20px;
+    left: 55px;
+    display: flex;
+    align-items: center;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    width: 18%;
+    width: 18%;
+    height: 40px;
+    z-index: 3000;
+    /* Đảm bảo nằm trên panel */
 }
 
 #search-input {
-  flex: 1;
-  border: none;
-  outline: none;
-  padding: 8px;
-  font-size: 14px;
-  border-radius: 5px;
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 8px;
+    font-size: 14px;
+    border-radius: 5px;
 }
 
 #search-btn {
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 18px;
-  padding: 5px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
 }
 
 .fa-diamond-turn-right {
-  font-size: 23px;
-  color: #007bff;
-  cursor: pointer;
-  margin-left: 5px;
-  margin-right: 10px;
-  transition: transform 0.3s ease-in-out;
+    font-size: 23px;
+    color: #007bff;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 10px;
+    transition: transform 0.3s ease-in-out;
 }
 
 .fa-diamond-turn-right:hover {
-  color: #6e6e6e;
+    color: #6e6e6e;
 }
 
 
 /* Panel thông tin bên trái */
+#navigation-form,
 #info-panel {
-  width: 25%;
-  height: 100vh;
-  background: white;
-  border-right: 1px solid #ccc;
-  padding:  0px 20px  0px 20px;
-  overflow-y: auto;
-  position: fixed;
-  left: -50%; /* Ban đầu ẩn */
-  top: 0;
-  z-index: 2000;
-  transition: left 0.3s ease-in-out;
+    width: 25%;
+    height: 100vh;
+    background: white;
+    border-right: 1px solid #ccc;
+    padding: 20px; /* Điều chỉnh padding */
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    z-index: 4000;
+    transition: left 0.3s ease-in-out;
+    box-sizing: border-box;
 }
 
-/* Khi panel mở */
+#navigation-form {
+    left: -25%;
+}
+
+#info-panel {
+    left: -50%;
+    z-index: 2000;
+}
+
+#navigation-form.show {
+    left: 0;
+}
+
 #info-panel.show {
-  left: 0;
+    left: 0;
 }
 
 /* Image styling */
 #place-image {
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 10px;
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
 }
 
 /* Cố định vị trí nút zoom */
 .leaflet-control-zoom {
-  position: fixed !important;
-  bottom: 20px !important;
-  right: 20px !important;
-  z-index: 1000 !important;
-  display: flex !important;
-  flex-direction: column;
+    position: fixed !important;
+    bottom: 20px !important;
+    right: 20px !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    flex-direction: column;
 }
 
 
+/* Đảm bảo box-sizing được áp dụng cho toàn bộ form */
 #review-form {
-  margin-top: 10px;
-  padding: 20px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px; /* Giới hạn chiều rộng form */
+    margin-top: 10px;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    max-width: 100%;
+    /* Giới hạn chiều rộng form */
+    box-sizing: border-box;
+    /* Đảm bảo padding không vượt quá chiều rộng */
 }
 
-#review-form input, 
-#review-form select, 
-#review-form textarea, 
+/* Áp dụng box-sizing cho tất cả phần tử trong form */
+#review-form input,
+#review-form select,
+#review-form textarea,
 #review-form button {
-  width: 100%; /* Đảm bảo tất cả phần tử đều có cùng chiều rộng */
-  padding: 10px;
-  margin-top: 8px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  box-sizing: border-box; /* Tránh tràn kích thước do padding */
+    width: 100%;
+    /* Đảm bảo tất cả phần tử đều có cùng chiều rộng */
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    box-sizing: border-box;
+    /* Đảm bảo padding không làm phần tử vượt ra ngoài */
 }
 
 #review-form textarea {
-  height: 80px; /* Tăng chiều cao ô nhập nhận xét */
-  resize: none; /* Không cho phép thay đổi kích thước */
+    height: 80px;
+    /* Tăng chiều cao ô nhập nhận xét */
+    resize: none;
+    /* Không cho phép thay đổi kích thước */
 }
 
 #review-form button {
-  background-color: #007bff;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  border: none;
-  margin-bottom: 20px;
-  transition: background 0.3s;
+    background-color: #007bff;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    border: none;
+    margin-bottom: 20px;
+    transition: background 0.3s;
 }
 
 #review-form button:hover {
-  background-color: #0056b3;
+    background-color: #0056b3;
 }
 
+
 #close-btn {
-  color: white;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%; /* Làm nút tròn */
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background 0.3s ease-in-out;
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    /* Làm nút tròn */
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease-in-out;
 }
 
 #close-btn:hover {
-  background: #cc0000; /* Màu đỏ đậm hơn khi hover */
+    background: #cc0000;
+    /* Màu đỏ đậm hơn khi hover */
 }
 
 /* Ẩn nút tìm kiếm mặc định của map */
 .leaflet-control-geocoder {
-  display: none !important;
+    display: none !important;
 }
 
 
 #danhmuc {
-  position: absolute;  /* Giữ cố định trên bản đồ */
-  top: 10px;  /* Khoảng cách từ trên xuống */
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  gap: 10px;
-  padding: 10px;
-  border-radius: 10px;
-  z-index: 3000;  /* Đảm bảo nó nằm trên bản đồ */
+    position: absolute;
+    /* Giữ cố định trên bản đồ */
+    top: 10px;
+    /* Khoảng cách từ trên xuống */
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    z-index: 3000;
+    /* Đảm bảo nó nằm trên bản đồ */
 }
 
 
 .category-btn {
-  padding: 10px 20px;
-  border: none;
-  color: black;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 18px;
-  cursor: pointer;
-  transition: all 0.3s ease-in-out;
-  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    padding: 10px 20px;
+    border: none;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .category-btn:hover {
-  background-color: #636363; /* Màu xanh đậm khi hover */
-  transform: scale(1.05); /* Hiệu ứng phóng to nhẹ */
+    background-color: #636363;
+    /* Màu xanh đậm khi hover */
+    transform: scale(1.05);
+    /* Hiệu ứng phóng to nhẹ */
 }
 
 .category-btn:active {
-  background-color: #525252; /* Màu khi nhấn */
-  transform: scale(0.95);
+    background-color: #525252;
+    /* Màu khi nhấn */
+    transform: scale(0.95);
 }
 
 .category-btn.selected {
-  background-color: #28a745; /* Màu xanh lá khi được chọn */
-}
-
-/* navigation */
-#navigation-form {
-  width: 25%;
-  height: 100vh;
-  background: white;
-  border-right: 1px solid #ccc;
-  padding:  100px 20px  0px 20px;
-  overflow-y: auto;
-  position: fixed;
-  left: -50%; /* Ban đầu ẩn */
-  top: 0;
-  z-index: 4000;
-  transition: left 0.3s ease-in-out;
-}
-
-#navigation-form.show {
-  left: 0;
-}
-
-/* button close_navigation */
-#nav-close-btn {
-  color: white;
-  border: none;
-  font-size: 16px;
-  font-weight: bold;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%; /* Làm nút tròn */
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  transition: background 0.3s ease-in-out;
-}
-
-#nav-close-btn:hover {
-  background: #cc0000; /* Màu đỏ đậm hơn khi hover */
+    background-color: #28a745;
+    /* Màu xanh lá khi được chọn */
 }
 
 
-#start-location{
-  top: 10px;
-  display: flex;
-  margin-left: 20px;
-  align-items: center;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  width: 85%;
-  height: 30px;
-}
-
-
-#end-location{
-  margin-top: 15px;
-  display: flex;
-  margin-left: 20px;
-  align-items: center;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-  padding: 5px;
-  width: 85%;
-  height: 30px;
-}
-/* ------------------- */
 
 /* avatar người dùng */
 #user-avatar {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  overflow: hidden;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: transform 0.3s ease;
-  z-index: 4000;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 4000;
 
 }
 
 #user-avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 #user-avatar:hover {
-  transform: scale(1.1);
+    transform: scale(1.1);
 }
 
 /* popup */
 .popup-container {
-  padding: 10px;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
+    padding: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
 }
+
 .popup-title {
-  margin: 5px 0;
-  font-size: 16px;
-  font-weight: bold;
+    margin: 5px 0;
+    font-size: 16px;
+    font-weight: bold;
 }
+
 .popup-rating {
-  margin: 5px 0;
-  font-size: 14px;
+    margin: 5px 0;
+    font-size: 14px;
 }
+
 .popup-hours {
-  margin: 5px 0;
-  font-size: 14px;
+    margin: 5px 0;
+    font-size: 14px;
 }
+
+/* button chỉ đường */
+#btn-route {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    /* Hiệu ứng gradient xanh dương */
+    color: white;
+    /* Màu chữ trắng */
+    border: none;
+    /* Bỏ viền */
+    border-radius: 8px;
+    /* Bo góc */
+    padding: 10px 20px;
+    /* Kích thước nút */
+    font-size: 16px;
+    /* Cỡ chữ vừa phải */
+    cursor: pointer;
+    /* Hiệu ứng con trỏ */
+    transition: all 0.3s ease-in-out;
+    /* Hiệu ứng hover */
+    display: flex;
+    /* Căn chỉnh icon và text */
+    align-items: center;
+    gap: 8px;
+    /* Khoảng cách giữa icon và chữ */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    /* Đổ bóng nhẹ */
+}
+
+#btn-route:hover {
+    background: linear-gradient(135deg, #0056b3, #003f7f);
+    /* Màu tối hơn khi hover */
+    transform: scale(1.05);
+    /* Hiệu ứng phóng to nhẹ */
+}
+
+#btn-route:active {
+    transform: scale(0.95);
+    /* Nhấn xuống hiệu ứng */
+}
+
+
+/* popup user */
+#user-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    display: none;
+    z-index: 3000;
+    min-width: 300px;
+    text-align: center;
+}
+
+.popup-content {
+    position: relative;
+}
+
+
+/* avatar người dùng */
+#user-avatar {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 4000;
+
+}
+
+.hidden {
+    display: none;
+}
+
+/* TÌM KIẾM ĐƯỜNG */
+.leaflet-routing-container {
+    padding: 0px;
+}
+
+.leaflet-touch .leaflet-bar {
+    margin-top: 30%;
+}
+
+.leaflet-routing-alternatives-container {
+    flex-direction: column;
+    width: 320px;
+    /* Giới hạn chiều rộng */
+    max-height: 500px;
+    /* Tránh quá dài */
+    overflow-y: auto;
+    /* Cuộn khi nội dung dài */
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+}
+
+.leaflet-routing-alt {
+    width: 100%;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.leaflet-routing-alt h2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.leaflet-routing-alt h3 {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.leaflet-routing-alt table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaflet-routing-alt td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.leaflet-routing-alt tr:last-child td {
+    border-bottom: none;
+}
+
+.leaflet-routing-container {
+    overflow-x: hidden;
+    /* Ẩn thanh cuộn ngang */
+    overflow-y: hidden;
+    /* Ẩn thanh cuộn dọc */
+}
+
+
+/* Nền mờ */
+#popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Làm tối nền */
+    z-index: 999;
+}
+
+/* Popup Avatar */
+#popup_avatar {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    text-align: center;
+    z-index: 1000;
+}
+
+#popup_avatar.show,
+#popup-overlay.show {
+    display: block;
+}
+
+.popup-item {
+    margin: 10px 0;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    background: #f8f8f8;
+    transition: background 0.2s;
+}
+
+.popup-item:hover {
+    background: #ddd;
+}
+
+
+/* button chỉ đường */
+#btn-route {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    /* Hiệu ứng gradient xanh dương */
+    color: white;
+    /* Màu chữ trắng */
+    border: none;
+    /* Bỏ viền */
+    border-radius: 8px;
+    /* Bo góc */
+    padding: 10px 20px;
+    /* Kích thước nút */
+    font-size: 16px;
+    /* Cỡ chữ vừa phải */
+    cursor: pointer;
+    /* Hiệu ứng con trỏ */
+    transition: all 0.3s ease-in-out;
+    /* Hiệu ứng hover */
+    display: flex;
+    /* Căn chỉnh icon và text */
+    align-items: center;
+    gap: 8px;
+    /* Khoảng cách giữa icon và chữ */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    /* Đổ bóng nhẹ */
+}
+
+#btn-route:hover {
+    background: linear-gradient(135deg, #0056b3, #003f7f);
+    /* Màu tối hơn khi hover */
+    transform: scale(1.05);
+    /* Hiệu ứng phóng to nhẹ */
+}
+
+#btn-route:active {
+    transform: scale(0.95);
+    /* Nhấn xuống hiệu ứng */
+}
+
+
+/* popup user */
+#user-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    display: none;
+    z-index: 3000;
+    min-width: 300px;
+    text-align: center;
+}
+
+.popup-content {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* avatar người dùng */
+#user-avatar {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 4000;
+
+}
+
+.hidden {
+    display: none;
+}
+
+/* TÌM KIẾM ĐƯỜNG */
+.leaflet-routing-container {
+    padding: 0px;
+}
+
+.leaflet-touch .leaflet-bar {
+    margin-top: 30%;
+}
+
+.leaflet-routing-alternatives-container {
+    flex-direction: column;
+    width: 320px;
+    /* Giới hạn chiều rộng */
+    max-height: 500px;
+    /* Tránh quá dài */
+    overflow-y: auto;
+    /* Cuộn khi nội dung dài */
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+}
+
+.leaflet-routing-alt {
+    width: 100%;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.leaflet-routing-alt h2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.leaflet-routing-alt h3 {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.leaflet-routing-alt table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaflet-routing-alt td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.leaflet-routing-alt tr:last-child td {
+    border-bottom: none;
+}
+
+.leaflet-routing-container {
+    overflow-x: hidden;
+    /* Ẩn thanh cuộn ngang */
+    overflow-y: hidden;
+    /* Ẩn thanh cuộn dọc */
+}
+
+
+/* Nền mờ */
+#popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Làm tối nền */
+    z-index: 999;
+}
+
+/* Popup Avatar */
+#popup_avatar {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    text-align: center;
+    z-index: 1000;
+}
+
+#popup_avatar.show,
+#popup-overlay.show {
+    display: block;
+}
+
+.popup-item {
+    margin: 10px 0;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    background: #f8f8f8;
+    transition: background 0.2s;
+}
+
+.popup-item:hover {
+    background: #ddd;
+}
+
+#navigation-form-custom {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 300px;
+    position: relative;
+}
+
+/* Đổi tên ID của nút đóng */
+#nav-close-btn-custom {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: transparent;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+/* Đảm bảo các input có ID cụ thể */
+#start-location-custom,
+#end-location-custom {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#location-btn-custom {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: blue;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#location-btn-custom:hover {
+    background: darkblue;
+}
+
+label {
+    font-weight: bold;
+    margin-top: 10px;
+    display: block;
+}
+
+
+/* Chinh navigation icon ke ben search */
+
+/* Navigation */
+#navigation-form #nav-close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    border: none;
+    background: none;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+#navigation-form input[type="text"],
+#navigation-form select,
+#navigation-form #number-location,
+#navigation-form #find-route-btn { /* Thêm selector cho nút tìm đường */
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-size: 1em;
+}
+
+#navigation-form select {
+    appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 8px center;
+    background-size: 16px;
+}
+
+#navigation-form #selectnavigationandnumber {
+    display: flex;
+    flex-direction: column;
+}
+
+#navigation-form #find-route-btn {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+#navigation-form #find-route-btn:hover {
+    background-color: #0056b3;
+}
+/* Chinh navigation icon ke ben search */
+
+/* Start Location */
+#start-location {
+    margin-top: 0;
+    /* No margin-top on the first input */
+}
+
+
+
+#nav-close-btn {
+    color: white;
+    border: none;
+    font-size: 16px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    /* Làm nút tròn */
+    cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease-in-out;
+}
+
+#nav-close-btn:hover {
+    background: #cc0000;
+    /* Màu đỏ đậm hơn khi hover */
+}
+
+/* button chỉ đường */
+#btn-route {
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    /* Hiệu ứng gradient xanh dương */
+    color: white;
+    /* Màu chữ trắng */
+    border: none;
+    /* Bỏ viền */
+    border-radius: 8px;
+    /* Bo góc */
+    padding: 10px 20px;
+    /* Kích thước nút */
+    font-size: 16px;
+    /* Cỡ chữ vừa phải */
+    cursor: pointer;
+    /* Hiệu ứng con trỏ */
+    transition: all 0.3s ease-in-out;
+    /* Hiệu ứng hover */
+    display: flex;
+    /* Căn chỉnh icon và text */
+    align-items: center;
+    gap: 8px;
+    /* Khoảng cách giữa icon và chữ */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    /* Đổ bóng nhẹ */
+}
+
+#btn-route:hover {
+    background: linear-gradient(135deg, #0056b3, #003f7f);
+    /* Màu tối hơn khi hover */
+    transform: scale(1.05);
+    /* Hiệu ứng phóng to nhẹ */
+}
+
+#btn-route:active {
+    transform: scale(0.95);
+    /* Nhấn xuống hiệu ứng */
+}
+
+
+/* popup user */
+#user-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+    display: none;
+    z-index: 3000;
+    min-width: 300px;
+    text-align: center;
+}
+
+.popup-content {
+    position: relative;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* avatar người dùng */
+#user-avatar {
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    z-index: 4000;
+
+}
+
+.hidden {
+    display: none;
+}
+
+/* TÌM KIẾM ĐƯỜNG */
+.leaflet-routing-container {
+    padding: 0px;
+}
+
+.leaflet-touch .leaflet-bar {
+    margin-top: 30%;
+}
+
+.leaflet-routing-alternatives-container {
+    flex-direction: column;
+    width: 320px;
+    /* Giới hạn chiều rộng */
+    max-height: 500px;
+    /* Tránh quá dài */
+    overflow-y: auto;
+    /* Cuộn khi nội dung dài */
+    font-family: Arial, sans-serif;
+    z-index: 1000;
+}
+
+.leaflet-routing-alt {
+    width: 100%;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.leaflet-routing-alt h2 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.leaflet-routing-alt h3 {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+}
+
+.leaflet-routing-alt table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.leaflet-routing-alt td {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}
+
+.leaflet-routing-alt tr:last-child td {
+    border-bottom: none;
+}
+
+.leaflet-routing-container {
+    overflow-x: hidden;
+    /* Ẩn thanh cuộn ngang */
+    overflow-y: hidden;
+    /* Ẩn thanh cuộn dọc */
+}
+
+
+/* Nền mờ */
+#popup-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    /* Làm tối nền */
+    z-index: 999;
+}
+
+/* Popup Avatar */
+#popup_avatar {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 250px;
+    text-align: center;
+    z-index: 1000;
+}
+
+#popup_avatar.show,
+#popup-overlay.show {
+    display: block;
+}
+
+.popup-item {
+    margin: 10px 0;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 5px;
+    background: #f8f8f8;
+    transition: background 0.2s;
+}
+
+.popup-item:hover {
+    background: #ddd;
+}
+
+
+/* Chinh popup hien thi review _ them danh gia */
+#btnOpenReviewPopup {
+    padding: 10px 20px;
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.review-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    /* Đặt z-index lớn để popup luôn ở trên cùng */
+}
+
+.review-popup-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+}
+
+.review-popup-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.review-user-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    font-size: 20px;
+}
+
+.review-user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: #e0e0e0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.review-avatar-letter {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.review-rating, .review-textarea {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px; /* Giữ nguyên margin-bottom nếu bạn muốn */
+  }
+
+.review-star {
+    font-size: 40px;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.review-star.active {
+    color: #ffc107;
+}
+
+.review-textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+}
+
+.review-add-media {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.review-media-icon {
+    margin-right: 5px;
+}
+
+.review-popup-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.review-popup-buttons button {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.review-cancel-button {
+    background-color: #ddd;
+}
+
+.review-submit-button {
+    background-color: #4285f4;
+    color: white;
+}
+
+/* Chinh popup hien thi review _ them danh gia */

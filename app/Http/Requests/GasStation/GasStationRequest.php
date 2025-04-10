@@ -21,13 +21,19 @@ class GasStationRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [    
-            'longitude' => 'required|numeric',
-            'latitude' => 'required|numeric',
-            'radius' => 'nullable|numeric|min:0',
-            'fuel_type' => 'nullable|integer',
-            'operating_hours' => 'nullable|string|date_format:H:i',
-        ];
+        $rules = [];
+
+        if ($this->has('search')) {
+            $rules = [    
+                'longitude' => 'required|numeric',
+                'latitude' => 'required|numeric',
+                'radius' => 'nullable|numeric|min:0',
+                'fuel_type' => 'nullable|integer',
+                'operation_time' => 'nullable|string'
+            ];
+        }
+
+        return $rules;
     }
 
     /**
@@ -43,7 +49,7 @@ class GasStationRequest extends FormRequest
             'radius.numeric' => 'Bán kính phải là một số.',
             'radius.min' => 'Bán kính không được nhỏ hơn 0.',
             'fuel_type.integer' => 'Loại nhiên liệu phải là một số nguyên hợp lệ.',
-            'operating_hours.date_format' => 'Thời gian hoạt động phải có định dạng HH:MM.',
+            'operation_time.string' => 'Thời gian hoạt động phải là chuỗi ký tự.',
         ];
     }
 }

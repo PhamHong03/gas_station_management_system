@@ -1,404 +1,499 @@
 @include('clients.layouts.header')
 
 <body>
-  <!-- Map Container -->
-  <div id="user-avatar">
-    <img src="https://i.pravatar.cc/1" alt="User Avatar">
-  </div>
-
-  <div id="map">
-    <div id="search-box">
-      <input type="text" id="search-input" placeholder="Nhập địa chỉ...">
-      <button id="search-btn">🔍</button>
-      <i id="nav-icon" class="fa-solid fa-diamond-turn-right"></i>
-      </div>
-
-    <div id="navigation-form">
-      <button id="nav-close-btn">❌</button>
-      
-      <input type="text" id="start-location" placeholder="Nhập điểm xuất phát..." >
-      <input type="text" id="end-location" placeholder="Nhập điểm đến...">
+    <!-- Map Container -->
+    <div id="user-avatar">
+        <img src="https://i.pravatar.cc/1" alt="User Avatar">
     </div>
-  </div>
-
-  <div id="danhmuc">
-      <button class="category-btn">Cửa hàng xăng</button>
-      <button class="category-btn">Trạm sạc điện</button>
-      <button class="category-btn">Cây ATM</button>
-  </div>
-
-
-  <!-- Panel Thông tin bên trái -->
-  <div id="info-panel">
-  <button id="close-btn">❌</button>
-
-    <div id="info-content">
-      <p>Chọn một địa điểm trên bản đồ để xem chi tiết.</p>
+    <!-- người dùng -->
+    <div id="popup_avatar">
+        @if (Auth::check())
+            <p><strong>{{ Auth::user()->name }}</strong></p>
+            <p>Email: {{ Auth::user()->email }}</p>
+            <!-- Hide "Đăng nhập" if logged in -->
+            <a href="{{ route('logout') }}" method="POST" id="logout-form">Đăng Xuất</a>
+        @else
+            <!-- Show "Đăng nhập" if not logged in -->
+            <a href="{{ route('login') }}" class="popup-item" id="login-btn">Đăng nhập</a>
+        @endif
     </div>
-  </div>
-  
-  <div id="info-panel" class="hidden">
-    <button id="close-btn">❌</button>
-    <div id="info-content">
-      <div data-location-id="1">
-        <img src="https://via.placeholder.com/300" alt="Tên địa điểm" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-        <h3>Tên địa điểm</h3>
-        <p><strong>Đánh giá:</strong> ⭐⭐⭐⭐☆ (4.5/5)</p>
-
-        <div id="tab-content">
-          <!-- Tab 1: Tổng Quan -->
-          <div class="tab-panel active" id="overview">
-            <p><strong>📍 Địa chỉ:</strong> Địa chỉ mẫu</p>
-            <p><strong>⏰ Giờ hoạt động:</strong> 08:00 - 22:00</p>
-            <p><strong>📞 Điện thoại:</strong> 0123 456 789</p>
-          </div>
-          <hr>
-
-          <!-- Bài Đánh Giá -->
-          <div id="reviews">
-            <h3>📢 Bài Đánh Giá</h3>
-            <div id="review-list">
-              <div class="review-item">
-                <p><strong>Nguyễn Văn A</strong> - ⭐⭐⭐⭐⭐</p>
-                <p>💬 Dịch vụ tốt, nhân viên thân thiện!</p>
-              </div>
-              <div class="review-item">
-                <p><strong>Trần Thị B</strong> - ⭐⭐⭐⭐☆</p>
-                <p>💬 Giá cả hợp lý, phục vụ nhanh.</p>
-              </div>
-            </div>
-
-            <h3>Thêm Đánh Giá</h3>
-            <form id="review-form">
-              <input type="text" id="review-name" placeholder="Tên bạn" required><br>
-              <select id="review-rating">
-                <option value="5">⭐⭐⭐⭐⭐</option>
-                <option value="4">⭐⭐⭐⭐</option>
-                <option value="3">⭐⭐⭐</option>
-                <option value="2">⭐⭐</option>
-                <option value="1">⭐</option>
-              </select><br>
-              <textarea id="review-comment" placeholder="Nhận xét của bạn" required></textarea><br>
-              <button type="submit">Gửi</button>
-            </form>
-          </div>
+    <div id="map">
+        <div id="search-box">
+            <input type="text" id="search-input" placeholder="Nhập địa chỉ...">
+            <button id="search-btn">🔍</button>
+            <i id="nav-icon" class="fa-solid fa-diamond-turn-right"></i>
         </div>
-      </div>
+        <div id="navigation-form">
+            <button id="nav-close-btn">❌</button>
+            <h3>Chỉ đường</h3>
+            <form method="GET" action="{{ route('index') }}" id="search-form">
+                <div id="selectnavigationandnumber">
+                    <select id="fueltypes-form" name="fuel_type">
+                        <option value="">Tất cả loại xăng</option>
+                        <option value="1">Xăng A95</option>
+                        <option value="2">Xăng E5</option>
+                        
+                    </select>
+
+                    <select name="operation_time" id="operation-time">
+                        <option value="">Tất cả thời gian hoạt động</option>
+                        @foreach($operationTimes as $time)
+                            <option value="{{ $time }}">{{ $time }}</option>
+                        @endforeach
+                    </select>
+                        
+                    <input type="number" id="number-location" name="radius" placeholder="Nhập khoảng cách (km)..." min="1" max="100">
+                    
+                    <!-- Vị trí ẩn (lấy từ geolocation JS) -->
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                    <input type="hidden" name="search" value="1">
+        
+                    <button type="submit" id="find-route-btn">Tìm đường</button>
+                </div>
+            </form>
+        </div>
     </div>
-  </div>
-
-  <div class="popup-container" data-location-id="1">
-    <h3 class="popup-title">Tên Địa Điểm</h3>
-    <p class="popup-rating">Đánh giá: <span class="rating-stars">⭐⭐⭐⭐</span> (4/5)</p>
-    <p class="popup-hours">⏰ Giờ mở cửa: <b>06:00 - 22:00</b></p>
-  </div>
-
-  
-  <!-- Import Leaflet JS -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <!-- Import Leaflet Geocoder JS -->
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
-  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
-  <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> 
-  <script>
-
-var mapOptions = {
-      center: [10.026667, 105.783333],
-      zoom: 15
-    };
-
-
-    L.Marker.prototype.options.icon = L.icon({
-        iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
-        shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
-    });
-
-
-    var map = new L.map('map', mapOptions);
-    var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-    map.addLayer(layer);
+</div>
+        <script>
+            // Tự động lấy vị trí và gán vào input hidden
+            navigator.geolocation.getCurrentPosition(function(position) {
+                document.getElementById('latitude').value = position.coords.latitude;
+                document.getElementById('longitude').value = position.coords.longitude;
+            }, function(error) {
+                console.error('Không thể lấy vị trí hiện tại:', error.message);
+            });
+        </script>
+        
     
-    var geocoder = L.Control.Geocoder.nominatim();
-    var control = L.Control.geocoder({
-      geocoder: geocoder,
-      defaultMarkGeocode: false
-    }).addTo(map);
-    
-    control.on("markgeocode", function(e) {
-        var center = e.geocode.center; // Lấy tọa độ vị trí tìm kiếm được
-        L.marker(center).addTo(map) // Thêm marker vào vị trí vừa tìm thấy
-            .bindPopup(e.geocode.name) // Hiển thị tên địa điểm trong popup
-            .openPopup();
-        map.setView(center, 15); // Di chuyển bản đồ đến vị trí đó
+
+    <div id="danhmuc">
+        <button class="category-btn">Cửa hàng xăng</button>
+        <button class="category-btn">Trạm sạc điện</button>
+        <button class="category-btn">Cây ATM</button>
+    </div>
+    <!-- Panel Thông tin bên trái -->
+    <div id="info-panel">
+        <button id="close-btn">❌</button>
+        <div id="info-content">
+            <!-- Tab 1: Tổng Quan -->
+            <div class="tab-panel active" id="overview">
+                <div id="overview-image">
+                    <img src="" alt="" id="location-image"
+                        style="max-width:100%; height:auto; display:block; margin:0 auto;">
+                </div>
+                <h3 id="location-name"></h3>
+                <p><strong>📍 Địa chỉ:</strong> <span id="location-address"></span></p>
+                <p><strong>⏰ Giờ hoạt động:</strong> <span id="operation-time"></span></p>
+                <p><strong>📞 Điện thoại:</strong> <span id="location-phone"></span></p>
+                <p><strong>📏 Khoảng cách:</strong> <span id="location-distance"></span></p>
+                <button id="btn-route">🚗 Chỉ đường</button>
+            </div>
+            <!-- Bài Đánh Giá -->
+            <div id="reviews-section">
+                <h4>📢 Đánh giá của khách hàng:</h4>
+                <div id="reviews-list"></div>
+                <h3>Thêm Đánh Giá</h3>
+                <button id="btnOpenReviewPopup">Thêm đánh giá</button>
+            </div>
+        </div>
+    </div>
+    {{-- <div id="reviewPopupContainer" class="review-popup">
+        <div class="review-popup-content">
+            <div class="review-popup-header">
+                <h2 class="review-popup-title">Chợ nổi Cái Răng</h2>
+            </div>
+            <div class="review-user-info">
+                <div class="review-user-avatar">
+                    <span class="review-avatar-letter">N</span>
+                </div>
+                <div class="review-user-details">
+                    <strong class="review-user-name">Ngoc Thao Nguyen</strong>
+                </div>
+            </div>
+            <div class="review-rating">
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+            </div>
+            <input type="text" class="review-textarea"
+                placeholder="Mô tả cụ thể trải nghiệm của bạn tại địa điểm này">
+            <div class="review-popup-buttons">
+                <button id="btnCancelReview" class="review-cancel-button">Huỷ</button>
+                <button id="btnSubmitReview" class="review-submit-button">Đăng</button>
+            </div>
+        </div>
+    </div> --}}
+
+
+    <div id="reviewPopupContainer" class="review-popup">
+        <div class="review-popup-content">
+            <div class="review-popup-header">
+                <h2 class="review-popup-title">Chợ nổi Cái Răng</h2>
+            </div>
+            <div class="review-user-info">
+                <div class="review-user-avatar">
+                    <span class="review-avatar-letter">N</span>
+                </div>
+                <div class="review-user-details">
+                    <strong class="review-user-name">Ngoc Thao Nguyen</strong>
+                </div>
+            </div>
+            <div class="review-rating">
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+                <span class="review-star">&#9734;</span>
+            </div>
+            <input type="text" class="review-textarea"
+                placeholder="Mô tả cụ thể trải nghiệm của bạn tại địa điểm này">
+            <div class="review-popup-buttons">
+                <button id="btnCancelReview" class="review-cancel-button">Huỷ</button>
+                <button id="btnSubmitReview" class="review-submit-button" data-location-id="123">Đăng</button>
+                <!-- gasStationId -->
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Import Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- Import Leaflet Geocoder JS -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <script>
+        
+        var mapOptions = {
+            center: [10.026667, 105.783333],
+            zoom: 15
+        };
+        L.Marker.prototype.options.icon = L.icon({
+            iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+            shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png"
+        });
+        // Di chuyển bản đồ đến vị trí đó
+        var map = new L.map('map', mapOptions);
+        var layer = new L.TileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png");
+        map.addLayer(layer);
+
+
+        let userLat, userLon;
+        navigator.geolocation.getCurrentPosition(function (position) {
+        userLat = position.coords.latitude;
+        userLon = position.coords.longitude;
+        var userLocation = L.marker([userLat, userLon]).addTo(map);
+        userLocation.setIcon(userIcon);
+        userLocation.addTo(map);
+        userLocation.bindPopup("Vị trí của bạn").openPopup();
+        map.setView([userLat, userLon], 15);
+        FetchLocation(userLat, userLon);
+        }, function (error) {
+        console.error("Không thể lấy vị trí của bạn:", error);
+        FetchLocation(10.04501, 105.78088);
         });
 
 
-    // Tạo icon mặc định cho cây xăng
-    var gasStationIcon = L.icon({
-        iconUrl: 'resources/gas-station.png', // Đường dẫn đến ảnh
-        iconSize: [20, 20], // Kích thước icon (chiều rộng, chiều cao)
-        iconAnchor: [20, 40], // Điểm neo của icon (nằm dưới cùng ở giữa)
-        popupAnchor: [0, -40] // Điểm neo của popup
-    });
-    var userIcon = L.icon({
-        iconUrl: '/assets/images/location.png', // Đường dẫn đến ảnh
-        iconSize: [20, 20], // Kích thước icon (chiều rộng, chiều cao)
-        iconAnchor: [20, 40], // Điểm neo của icon (nằm dưới cùng ở giữa)
-        popupAnchor: [0, -40] // Điểm neo của popup
-    });
 
+        var geocoder = L.Control.Geocoder.nominatim();
+        var control = L.Control.geocoder({
+            geocoder: geocoder,
+            defaultMarkGeocode: false
+        }).addTo(map);
+        control.on("markgeocode", function(e) {
+            var center = e.geocode.center; // Lấy tọa độ vị trí tìm kiếm được
+            L.marker(center).addTo(map) // Thêm marker vào vị trí vừa tìm thấy
+                .bindPopup(e.geocode.name) // Hiển thị tên địa điểm trong popup
+                .openPopup();
+            map.setView(center, 15); // Di chuyển bản đồ đến vị trí đó
+        });
+        // Định nghĩa icon cây xăng
+        var gasStationIcon = L.icon({
+            iconUrl: "https://cdn-icons-png.flaticon.com/512/6686/6686706.png",
+            iconSize: [35, 35], // Kích thước của logo
+            iconAnchor: [20, 40], // Điểm neo của icon
+            popupAnchor: [1, -34] // Điểm neo của popup
+        });
+        var locations = [
+            @foreach ($gasStations as $station)
+                {
+                    id: {{ $station->id }},
+                    name: "{{ $station->name }}",
+                    address: "{{ $station->address }}",
+                    phone: "{{ $station->phone }}",
+                    operation_time: "{{ $station->operation_time }}",
+                    image: "{{ asset('storage/' . $station->image) }}",
+                    coords: [{{ $station->latitude }}, {{ $station->longitude }}],
+                    rating: {{ $station->rating ?? 0 }},
+                    reviews: [
+                        @if (!empty($station->reviews))
+                            @foreach ($station->reviews as $review)
+                                {
+                                    name: "{{ $review->user->name ?? 'Ẩn danh' }}",
+                                    rating: {{ $review->rating }},
+                                    comment: "{{ $review->content }}"
+                                }
+                                @if (!$loop->last)
+                                    ,
+                                @endif
+                            @endforeach
+                        @endif
+                    ]
+                }
+                @if (!$loop->last)
+                    ,
+                @endif
+            @endforeach
+        ];
+        const loggedInUserName =
+            "{{ Auth::user()->name ?? 'Ẩn danh' }}"; // Lấy tên người dùng hoặc 'Ẩn danh' nếu chưa đăng nhập
 
-/*
-    var locations = [
-      { 
-          id: 1,
-          name: "Cửa hàng Xăng dầu Petrolimex Số 05",
-          address: "24 Nguyễn Trãi, Thới Bình, Ninh Kiều, Cần Thơ, Việt Nam",
-          phone: "02923821675",
-          coords: [10.04501, 105.78088],
-          image: "https://lh5.googleusercontent.com/p/AF1QipOpl3G1h8M124D8daxNjqPfGCtDrVSpEEMj7Jyi=w408-h544-k-no",
-          rating: 4.0,
-          openHours: "06:00 - 22:00",
-          reviews: [
-          { name: "Nguyễn Văn A", rating: 5, comment: "Dịch vụ tốt, nhân viên thân thiện!" },
-          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." },
-          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." }
-            ]
-      },
-      { 
-          id: 2,
-          name: "Khu II - Đường 3/2",
-          coords: [10.038072, 105.769839],
-          image: "https://upload.wikimedia.org/wikipedia/commons/2/2d/CTU_Main.jpg",
-          rating: 4.2,
-          openHours: "07:00 - 20:00",
-          reviews: [
-          { name: "Nguyễn Văn A", rating: 5, comment: "Dịch vụ tốt, nhân viên thân thiện!" },
-          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." },
-          { name: "Trần Thị B", rating: 4, comment: "Giá xăng ổn định, đổ nhanh chóng." }
-      ]
-      });
-    ];
-    */
-    function getStarRating(rating) {
-      var fullStar = '⭐';
-      var stars = "";
-      for (var i = 1; i <= 5; i++) {
-          stars += i <= Math.floor(rating) ? fullStar : "☆";
-      }
-      return stars;
-    }
+        let selectedGasStationId = null;
 
-    function showInfoPanel() {
-      document.getElementById("info-panel").classList.add("show");
-      document.getElementById("map").classList.add("expanded");
-    }
-    function hideInfoPanel() {
-      document.getElementById("info-panel").classList.remove("show");
-      document.getElementById("map").classList.remove("expanded");
-    }
+        locations.forEach(location => {
+            const marker = L.marker(location.coords, {
+                icon: gasStationIcon
+            }).addTo(map); // Sử dụng gasStationIcon cho marker
 
-    
-    var icon = L.icon({
-                iconUrl: 'https://cdn-icons-png.flaticon.com/512/6686/6686706.png', // Đường dẫn đến logo Đại học Cần Thơ
-                iconSize: [40, 40], // Kích thước của logo
-                iconAnchor: [20, 40], // Vị trí của logo
-                popupAnchor: [1, -34] // Vị trí của popup
-            });
-/*
-    locations.forEach(function(location) {
-      var marker = L.marker(location.coords).addTo(map);
-            
-            marker.setIcon(icon);
-            marker.addTo(map);
-      // ❌ Popup KHÔNG chứa hình ảnh
-      var popupContent = `
-        <div data-location-id="${location.id}">
-          <h3 style="margin: 5px 0;">${location.name}</h3>
-          <p style="margin: 5px 0; font-size: 16px;">Đánh giá: ${getStarRating(location.rating)} (${location.rating}/5)</p>
-          <p style="margin: 5px 0; font-size: 14px;">⏰ Giờ mở cửa: <b>${location.openHours}</b></p>
-        </div>
-      `;
-      marker.bindPopup(popupContent);
-      
-      marker.on("mouseover", function() { 
-        this.openPopup();
-      });
-      marker.on("mouseout", function() { 
-        this.closePopup();
-      });
-      
-
-
-
-      // ✅ Panel bên trái sẽ HIỂN THỊ hình ảnh
-      marker.on("click", function() {
-        document.getElementById("info-content").innerHTML = `
-            <div data-location-id="${location.id}">
-            <img src="${location.image}" alt="${location.name}" style="max-width:100%; height:auto; display:block; margin:0 auto;">
-            <h3>${location.name}</h3>
-            <p><strong>Đánh giá:</strong> ${getStarRating(location.rating)} (${location.rating}/5)</p>
-        
-            <div id="tab-content">
-                <!-- Tab 1: Tổng Quan -->
-                <div class="tab-panel active" id="overview">
-                    <p><strong>📍 Địa chỉ:</strong> ${location.address}<span id="place-address"></span></p>
-                    <p><strong>⏰ Giờ hoạt động:</strong> ${location.openHours} <span id="place-hours"></span></p>
-                    <p><strong>📞 Điện thoại:</strong> ${location.phone}<span id="place-phone"></span></p>
-                </div>
-                <hr>
-
-                <!-- Bài Đánh Giá -->
-                <div id="reviews">
-                    <h3>📢 Bài Đánh Giá</h3>
-                    <div id="review-list">
-                    ${location.reviews.length > 0 
-                        ? location.reviews.map(review => `
-                            <div class="review-item">
-                                <p><strong>${review.name}</strong> - ${getStarRating(review.rating)}</p>
-                                <p>💬 ${review.comment}</p>
-                                
-                            </div>
-                        `).join('')
-                        : "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>"
-                        
-                    }
-                    <h3>Thêm Đánh Giá</h3>
-                    <form id="review-form">
-                      <input type="text" id="review-name" placeholder="Tên bạn" required><br>
-                      <select id="review-rating">
-                        <option value="5">⭐⭐⭐⭐⭐</option>
-                        <option value="4">⭐⭐⭐⭐</option>
-                        <option value="3">⭐⭐⭐</option>
-                        <option value="2">⭐⭐</option>
-                        <option value="1">⭐</option>
-                      </select><br>
-                      <textarea id="review-comment" placeholder="Nhận xét của bạn" required></textarea><br>
-                      <button type="submit">Gửi</button>
-                    </form>
-                    </div>
-                </div>
-            </div>
-
-          </div>
-        `;
-        showInfoPanel();
-      });
-    });
-*/
-
-let userLat, userLon;
-
-navigator.geolocation.getCurrentPosition(function (position) {
-    userLat = position.coords.latitude;
-    userLon = position.coords.longitude;
-    var userLocation = L.marker([userLat, userLon]).addTo(map);
-    userLocation.setIcon(userIcon);
-    userLocation.addTo(map);
-    userLocation.bindPopup("Vị trí của bạn").openPopup();
-    map.setView([userLat, userLon], 15);
-    FetchLocation(userLat, userLon);
-}, function (error) {
-    console.error("Không thể lấy vị trí của bạn:", error);
-    FetchLocation(10.04501, 105.78088);
-});
-
-/*async function FetchLocation(Lat, Lon) {
-    try {
-        
-        fetch(`http://127.0.0.1:8000/gas-station/FindGas?latitude=${Lat}&longitude=${Lon}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Lỗi khi lấy dữ liệu từ API");
+            let averageRating = 0;
+            if (location.reviews && location.reviews.length > 0) {
+                let totalRating = 0;
+                location.reviews.forEach(review => {
+                    totalRating += review.rating;
+                });
+                averageRating = totalRating / location.reviews.length;
             }
-            return response.json();
-        })
-        .then(data=>{
-          if(!Array.isArray(data)){
-            console.error("Dữ liệu API không hợp lệ:", data);
-            return;
-          }
-          data.forEach(location => {
-            const lat = parseFloat(location.latitude);
-            const lon = parseFloat(location.longitude);
-
-            var marker = L.marker([lat, lon], ).addTo(map);
-            marker.setIcon(icon);
-            marker.addTo(map);
-            var popupContent = `
-                <div>
-                    <h3>${location.name}</h3>
-                    <p>📍 ${location.address}</p>
-                    <p>📞 ${location.phone}</p>
-                    <p>📏 Cách bạn: <b>${location.distance} km</b></p>
-                </div>
-            `;
+            // Tạo nội dung popup cho marker
+            const popupContent = `
+            <div>
+                <h3>${location.name}</h3>
+                <p>📍 ${location.address}</p>
+                <p>📞 ${location.phone}</p>
+                <p>📏 Cách bạn: <b>${location.distance} km</b></p>
+                <p>🕒 Thời gian hoạt động: ${location.operation_time}</p>
+                <p>⭐ Đánh giá: ${averageRating.toFixed(1)}/5</p>
+            </div>
+        `;
             marker.bindPopup(popupContent);
+            // Khi click vào marker, cập nhật nội dung cho panel bên trái
+            marker.on("click", function() {
+                // Cập nhật thông tin trong panel bên trái
+                document.getElementById("location-image").src = location.image;
+                document.getElementById("location-name").textContent = location.name;
+                document.getElementById("location-address").textContent = location.address;
+                document.getElementById("operation-time").textContent = location.operation_time;
+                document.getElementById("location-phone").textContent = location.phone;
+                document.getElementById("location-distance").textContent = `${location.distance} km`;
+                document.querySelector('.review-popup-title').textContent = location.name;
+                document.querySelector('.review-user-name').textContent =
+                    loggedInUserName; // Bạn có thể thay đổi tên người dùng nếu cần
+                document.querySelector('.review-textarea').value =
+                    ""; // Xóa nội dung textarea khi mở popup mới
+                // Cập nhật phần đánh giá
+              
+                selectedGasStationId = location.id;
 
-            marker.on("click", function () {
+                let reviewsHtml = '';
+                if (location.reviews && location.reviews.length > 0) {
+                    location.reviews.forEach(review => {
+                        reviewsHtml += `
+                        <div class="review-item">
+                            <p><strong>${review.name || 'Ẩn danh'}</strong> - ⭐ ${review.rating}/5</p>
+                            <p>💬 ${review.comment}</p>
+                        </div>
+                    `;
+                    });
+                } else {
+                    reviewsHtml = "<p>Chưa có đánh giá nào. Hãy là người đầu tiên đánh giá!</p>";
+                }
+                document.getElementById("reviews-list").innerHTML = reviewsHtml;
 
-                document.getElementById("info-content").innerHTML = `
-                    <div>
-                        <h3>${location.name}</h3>
-                        <p><strong>📍 Địa chỉ:</strong> ${location.address}</p>
-                        <p><strong>📞 Điện thoại:</strong> ${location.phone}</p>
-                        <p><strong>📏 Khoảng cách:</strong> ${location.distance} km</p>
-                        <button onclick="showRoute(${Lat}, ${Lon}, ${lat}, ${lon})">🚗 Chỉ đường</button>
+                // Hiển thị panel bên trái (nếu cần)
+                showInfoPanel();
+                document.getElementById("btn-route").onclick = function() {
+                showRoute(userLat, userLon, location.coords[0], location.coords[1]);
+                };
+            });
+        });
+
+        // Hàm hiển thị panel bên trái
+        function showInfoPanel() {
+            const infoPanel = document.getElementById("info-panel");
+            if (infoPanel) {
+                infoPanel.classList.add("show"); // Thêm lớp 'show' để panel trượt vào
+            }
+        }
+        // Hàm đóng panel bên trái
+        function hideInfoPanel() {
+            const infoPanel = document.getElementById("info-panel");
+            if (infoPanel) {
+                infoPanel.classList.remove("show"); // Loại bỏ lớp 'show' để panel trượt ra ngoài
+            }
+        }
+        // Đóng panel khi click vào nút đóng
+        document.getElementById("close-btn").addEventListener("click", hideInfoPanel);
+        // Hiển thị form navigation khi click vào icon
+        document.getElementById("nav-icon").addEventListener("click", showNavForm);
+        // Ẩn form navigation khi click vào nút đóng
+        document.getElementById("nav-close-btn").addEventListener("click", hideNavForm);
+        // Hàm để hiển thị form
+        function showNavForm() {
+            document.getElementById("navigation-form").style.display = "block";
+        }
+        // Hàm để ẩn form
+        function hideNavForm() {
+            document.getElementById("navigation-form").style.display = "none";
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            const avatar = document.getElementById("user-avatar");
+            const popup = document.getElementById("popup_avatar");
+
+            // Toggle hiển thị popup khi nhấn avatar
+            avatar.addEventListener("click", function(event) {
+                popup.classList.toggle("show"); // Hiển thị hoặc ẩn popup
+                event.stopPropagation(); // Ngăn chặn sự kiện lan ra ngoài
+            });
+
+            // Ẩn popup khi nhấn bên ngoài
+            document.addEventListener("click", function(event) {
+                if (!avatar.contains(event.target) && !popup.contains(event.target)) {
+                    popup.classList.remove("show"); // Ẩn popup
+                }
+            });
+        });
+        btnSubmitReview.addEventListener('click', function() {
+            const gasStationId = selectedGasStationId; // Hoặc cách lấy gasStationId bạn đang dùng
+            const rating = document.querySelectorAll('.review-star.active').length;
+            const content = document.querySelector('.review-textarea').value;
+            const userName = document.querySelector('.review-user-name').textContent;
+
+            if (!gasStationId) {
+                alert('Vui lòng chọn một trạm xăng trước khi đánh giá!');
+                return;
+            }
+            if (rating === 0) {
+                alert('Vui lòng chọn số sao!');
+                return;
+            }
+            if (!content.trim()) {
+                alert('Vui lòng nhập nội dung đánh giá!');
+                return;
+            }
+
+            console.log('Sending request to:', '/reviews/store');
+            console.log('Data:', {
+                gasStationId,
+                rating,
+                content
+            });
+
+            fetch('/reviews/store', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute(
+                            'content')
+                    },
+                    body: JSON.stringify({
+                        gasStationId: gasStationId,
+                        rating: rating,
+                        content: content
+                    })
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    return response.text(); // Lấy nội dung thô
+                })
+                .then(text => {
+                    console.log('Response text:', text); // In nội dung phản hồi
+                    try {
+                        const data = JSON.parse(text); // Thử parse thành JSON
+                        if (data.success) {
+                            const reviewsList = document.getElementById('reviews-list');
+                            reviewsList.innerHTML += `
+                    <div class="review-item">
+                        <p><strong>${userName}</strong> - ⭐ ${rating}/5</p>
+                        <p>💬 ${content}</p>
                     </div>
                 `;
-                showInfoPanel();
+                            reviewPopupContainer.style.display = 'none';
+                            document.querySelector('.review-textarea').value = '';
+                            reviewStars.forEach(star => star.classList.remove('active'));
+                        } else {
+                            alert('Có lỗi xảy ra: ' + data.message);
+                        }
+                    } catch (e) {
+                        console.error('Parse error:', e);
+                        alert('Server trả về lỗi không phải JSON: ' + text);
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    alert('Đã có lỗi xảy ra khi gửi đánh giá.');
+                });
             });
-          });
-        })
 
-    } catch (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
-    }
-}
-*/
+            var currentRoute = null;
+            // Hàm hiển thị đường đi
+            function showRoute(userLat, userLon, destLat, destLon) {
+                // Xóa tuyến đường cũ nếu có
+                if (currentRoute) {
+                    map.removeControl(currentRoute);
+                }
 
-var currentRoute = null;
-// Hàm hiển thị đường đi
-function showRoute(userLat, userLon, destLat, destLon) {
-  // Xóa tuyến đường cũ nếu có
-  if (currentRoute) {
-    map.removeControl(currentRoute);
-  }
+                // Tạo tuyến đường mới
+                currentRoute = L.Routing.control({
+                    waypoints: [
+                        L.latLng(userLat, userLon), // Vị trí của bạn
+                        L.latLng(destLat, destLon) // Trạm xăng được click
+                    ],
+                    routeWhileDragging: false,
+                        createMarker: function() {
+                        return null; // Không tạo marker cho các waypoint
+                    }
+                }).addTo(map);
+            }
 
-  // Tạo tuyến đường mới
-  currentRoute = L.Routing.control({
-    waypoints: [
-      L.latLng(userLat, userLon), // Vị trí của bạn
-      L.latLng(destLat, destLon) // Trạm xăng được click
-    ],
-    routeWhileDragging: true
-  }).addTo(map);
-}
+            // button navigation
+            function showNavForm() {
+                document.getElementById("navigation-form").classList.add("show");
+                document.getElementById("map").classList.add("expanded");
 
-    document.getElementById("close-btn").addEventListener("click", hideInfoPanel);
+            }
 
+            function hideNavForm() {
+                document.getElementById("navigation-form").classList.remove("show");
+                document.getElementById("map").classList.remove("expanded");
+            }
 
-    // button navigation
-    function showNavForm() {
-      document.getElementById("navigation-form").classList.add("show");
-      document.getElementById("map").classList.add("expanded");
+            const btnOpenReviewPopup = document.getElementById('btnOpenReviewPopup');
+            const reviewPopupContainer = document.getElementById('reviewPopupContainer');
+            const btnCancelReview = document.getElementById('btnCancelReview');
+            const reviewStars = document.querySelectorAll('.review-star');
 
-    }
+            btnOpenReviewPopup.addEventListener('click', () => {
+                reviewPopupContainer.style.display = 'flex';
+            });
 
-    function hideNavForm() {
-      document.getElementById("navigation-form").classList.remove("show");
-      document.getElementById("map").classList.remove("expanded");
+            btnCancelReview.addEventListener('click', () => {
+                reviewPopupContainer.style.display = 'none';
+            });
 
-    }
-
-    // Khi nhấn vào icon navigation, hiển thị form
-    document.getElementById("nav-icon").addEventListener("click", showNavForm);
-
-    // Khi nhấn vào nút đóng, ẩn form
-    document.getElementById("nav-close-btn").addEventListener("click", hideNavForm);
-
-
-  </script>
+            reviewStars.forEach((star, index) => {
+                star.addEventListener('click', () => {
+                    for (let i = 0; i <= index; i++) {
+                        reviewStars[i].classList.add('active');
+                    }
+                    for (let i = index + 1; i < reviewStars.length; i++) {
+                        reviewStars[i].classList.remove('active');
+                    }
+                });
+            });
+    </script>
 </body>
+
 </html>

@@ -9,37 +9,53 @@ use App\Models\GasStation;
 use App\Models\GasStationFuel;
 
 
-class GasStationServices{
-    public function findNear(GasStationRequest $request) {
-  
+class GasStationServices
+{
+    public function findNear(GasStationRequest $request)
+    {
         $validatedData = $request->validated();
         $latitude = $validatedData['latitude'];
         $longitude = $validatedData['longitude'];
-        $radius = $validatedData['radius'] ?? 5; // Bán kính mặc định
+        $radius = ($validatedData['radius'] ?? 5) * 1000;
         $fuelType = $validatedData['fuel_type'] ?? null;
-        $operationTime = $validatedData['operating_hours'] ?? null;
-        
-       $query = DB::table('gas_stations as g')
-        ->join('gastation_fuel_type as gf', 'g.id', '=', 'gf.GasStationId')
-        ->selectRaw("
-            DISTINCT g.id, g.name, g.address, g.phone, g.longitude, g.latitude, g.operation_time,
-            (6371 * ACOS(
-                COS(RADIANS(?)) * COS(RADIANS(g.latitude)) 
-                * COS(RADIANS(g.longitude) - RADIANS(?)) 
-                + SIN(RADIANS(?)) * SIN(RADIANS(g.latitude))
-            )) AS distance", [$latitude, $longitude, $latitude])
-        ->having('distance', '<=', $radius)
-        ->orderBy('distance', 'asc');
+        $operationTime = $validatedData['operation_time'] ?? null;
 
-        // Áp dụng điều kiện lọc nếu có
+        $stations = GasStation::with(['reviews', 'gasStationFuel']);
+
         if ($fuelType) {
-            $query->where('gf.FuelTypeId', $fuelType);
+            $stations = $stations->whereHas('gasStationFuel', function($query) use ($fuelType) {
+                $query->where('FuelTypeId', $fuelType);
+            });
         }
 
-       
+        if ($operationTime) {
+            $stations = $stations->where('operation_time', $operationTime);
+        }
 
-        $gasStations = $query->get();
-    
-        return response()->json($gasStations, 200, ['Content-Type' => 'application/json'], JSON_UNESCAPED_UNICODE);
+        $stations = $stations->get();
+
+        $nearbyStations = [];
+
+        foreach ($stations as $index => $station) {
+            $url = "https://router.project-osrm.org/route/v1/driving/{$longitude},{$latitude};{$station->longitude},{$station->latitude}?overview=false";
+        
+            try {
+                $response = Http::get($url);
+                $data = $response->json();
+        
+                if (!empty($data['routes'][0])) {
+                    $drivingDistance = $data['routes'][0]['distance'];
+        
+                    if ($drivingDistance <= $radius) {
+                        $nearbyStations[] = $station;
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error("Error fetching distance for station {$station->id}: " . $e->getMessage());
+                continue;
+            }
+        }
+
+        return $nearbyStations;
     }
 }

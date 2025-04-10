@@ -86,5 +86,5 @@ class GasStationService
         if($gasStation->delete()) return true;
         return redirect()->back()->with('error', 'Xóa cây xăng thất bại');
     }
-   
+
 }

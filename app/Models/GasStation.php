@@ -9,23 +9,31 @@ use App\Models\Ward;
 use App\Models\Review;
 use App\Models\GasStationFuel;
 
-class GasStation extends Model {
+class GasStation extends Model
+{
     use HasFactory;
 
     protected $table = 'gas_stations';
     protected $fillable = ['name', 'address', 'phone', 'longitude', 'latitude', 'image', 'operation_time', 'CompanyId', 'WardId'];
 
-    public function company() {
+    public function company()
+    {
         return $this->belongsTo(Company::class, 'CompanyId', 'id');
     }
-    public function ward() {
+    public function ward()
+    {
         return $this->belongsTo(Ward::class, 'WardId', 'id');
     }
-    public function review() {
+    // public function review() { //đổi cái tên reviews nè
+    //     return $this->hasMany(Review::class, 'GasStationId', 'id');
+    // }
+    public function reviews()
+    {
         return $this->hasMany(Review::class, 'GasStationId', 'id');
     }
-    public function gasStationFuel() {
+
+    public function gasStationFuel()
+    {
         return $this->hasMany(GasStationFuel::class, 'GasStationId', 'id');
     }
-
 }
