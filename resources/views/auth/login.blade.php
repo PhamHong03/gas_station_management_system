@@ -1,114 +1,222 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng Nhập</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://use.fontawesome.com/f59bcd8580.css">
+    <title>Đăng Nhập - Hệ thống Quản lý Cây Xăng</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        html,
-        body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f0f2f5;
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --success-color: #198754;
+            --dark-color: #212529;
         }
 
-        .container {
+        body {
+            height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+        }
+
+        .login-wrapper {
+            width: 100%;
+            max-width: 450px;
+            padding: 0;
         }
 
         .auth-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 30px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             background: white;
+        }
+
+        .auth-header {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 25px 40px;
+            text-align: center;
+            position: relative;
+        }
+
+        .auth-header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .brand-logo {
+            margin-bottom: 15px;
+            font-size: 40px;
+            color: #fff;
+        }
+
+        .auth-body {
+            padding: 30px 40px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+        }
+
+        .form-control {
+            height: 48px;
             border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding-left: 15px;
+            border: 1px solid #ced4da;
+            transition: all 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+        }
+
+        .input-icon {
+            position: absolute;
+            top: 43px;
+            right: 15px;
+            color: #6c757d;
+        }
+
+        .btn-login {
+            height: 48px;
+            border-radius: 8px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            background-color: var(--dark-color);
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .btn-login:hover {
+            background-color: #000;
+            transform: translateY(-1px);
         }
 
         .form-footer {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
         }
 
         .form-footer a {
-            color: #1877f2;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
         }
 
-        .toggle-link {
-            text-align: center;
-            margin-top: 15px;
+        .form-footer a:hover {
+            text-decoration: underline;
         }
-
-        .toggle-link a {
-            color: #1877f2;
+        
+        .remember-me {
+            margin-bottom: 20px;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 5px;
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password a {
+            color: var(--secondary-color);
+            font-size: 0.875rem;
+            text-decoration: none;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="login-wrapper">
         <div class="auth-container">
             <div class="auth-header">
-                <h1>Đăng nhập</h1>
+                <div class="brand-logo">
+                    <i class="fas fa-gas-pump"></i>
+                </div>
+                <h1>Đăng nhập hệ thống</h1>
             </div>
-            <div class="container">
+            
+            <div class="auth-body">
                 @include('admin.layouts.alert')
-            </div>
-            <form action="" method="POST">
-                @csrf
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="Nhập email">
+                
+                <form action="" method="POST">
+                    @csrf
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <div class="input-group">
+                            <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" placeholder="Nhập email của bạn" value="{{ old('email') }}" required>
+                            <span class="input-icon">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                        </div>
+                        @error('email')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                    </div>
 
-                    @error('email')
-                        <div class="ms-5 text-danger">{{ $message }}</div>
-                    @enderror
+                    <div class="form-group">
+                        <label for="password">Mật khẩu</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" placeholder="Nhập mật khẩu của bạn" required>
+                            <span class="input-icon">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </div>
+                        @error('password')
+                            <div class="error-message">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <div class="form-check remember-me">
+                                <input class="form-check-input" type="checkbox" name="remember" id="remember">
+                                <label class="form-check-label" for="remember">
+                                    Ghi nhớ đăng nhập
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="forgot-password">
+                                <a href="#">Quên mật khẩu?</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-login btn-dark w-100">
+                        <i class="fas fa-sign-in-alt me-2"></i> Đăng nhập
+                    </button>
+                </form>
+
+                <div class="form-footer">
+                    <p>Chưa có tài khoản? <a href="{{ route('register') }}">Đăng ký ngay</a></p>
                 </div>
-
-                <div class="form-group">
-                    <label for="password">Mật khẩu</label>
-                    <input type="password" class="form-control" id="password" name="password"
-                        placeholder="Nhập mật khẩu">
-                    @error('password')
-                        <div class="ms-5 text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
-                <button type="submit" class="btn btn-dark w-100">Đăng nhập</button>
-            </form>
-
-            <div class="form-footer">
-                <p>Không có tài khoản? <a href="{{ route('register') }}">Đăng Ký</a></p>
             </div>
         </div>
-
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        document.getElementById('show-signup').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.querySelector('.auth-container').style.display = 'none';
-            document.getElementById('signup-form').style.display = 'block';
-        });
-
-        document.getElementById('show-login').addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('signup-form').style.display = 'none';
-            document.querySelector('.auth-container').style.display = 'block';
-        });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
