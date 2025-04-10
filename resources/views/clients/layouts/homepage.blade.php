@@ -28,12 +28,14 @@
             <h3>Chỉ đường</h3>
             <form method="GET" action="{{ route('index') }}" id="search-form">
                 <div id="selectnavigationandnumber">
-                    <select id="fueltypes-form"  name="fuel_type">
-                        <option value="">Chọn loại xăng</option>
+                    <select id="fueltypes-form" name="fuel_type">
+                        <option value="">-- Chọn loại nhiên liệu --</option>
                         @foreach ($fuelTypes as $item)
-                            <option value="{{ $item->id }}">{{ $item->name }}</option>
+                            <option value="{{ $item->id }}"
+                                {{ old('fuel_type', request('fuel_type')) == $item->id ? 'selected' : '' }}>
+                                {{ $item->name }}
+                            </option>
                         @endforeach
-                        <!-- Các option sẽ được thêm vào sau khi gọi hàm -->
                     </select>
 
                     <select name="operation_time" id="operation-time">
@@ -79,7 +81,7 @@
                     <p><strong><i class="fa-solid fa-location-dot" style="color: #0091ff;"></i> Địa chỉ:</strong> <span
                             id="location-address"></span></p>
                     <p><strong><i class="fa-solid fa-clock" style="color: #0091ff;"></i> Giờ hoạt động:</strong> <span
-                            id="operation-time"></span></p>
+                            id="operation-time1"></span></p>
                     <p><strong><i class="fa-solid fa-phone" style="color: #0091ff;"></i> Điện thoại:</strong> <span
                             id="location-phone"></span></p>
                     <p><strong><i class="fa-solid fa-ruler" style="color: #0091ff;"></i> Khoảng cách:</strong> <span
@@ -132,24 +134,7 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById("clear-route-btn").addEventListener("click", function () {
-            if (currentRoute) {
-                map.removeControl(currentRoute);
-                currentRoute = null;
-            }
-            this.style.display = "none"; // Ẩn nút sau khi ẩn tuyến đường
-        });
-
-        window.onload = function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function(position) {
-                    document.getElementById("latitude").value = position.coords.latitude;
-                    document.getElementById("longitude").value = position.coords.longitude;
-                });
-            }
-        };
-    </script>
+    
     <!-- Import Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <!-- Import Leaflet Geocoder JS -->
@@ -166,6 +151,9 @@
             iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
             shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
         });
+        var map = new L.map("map", mapOptions);
+        var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        map.addLayer(layer);
         let userLat, userLon;
         navigator.geolocation.getCurrentPosition(function (position) {
         userLat = position.coords.latitude;
@@ -183,9 +171,7 @@
 
 
         // Di chuyển bản đồ đến vị trí đó
-        var map = new L.map("map", mapOptions);
-        var layer = new L.TileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-        map.addLayer(layer);
+
         var geocoder = L.Control.Geocoder.nominatim();
         var control = L.Control.geocoder({
             geocoder: geocoder,
@@ -206,36 +192,32 @@
             popupAnchor: [1, -34] // Điểm neo của popup
         });
         var locations = [
-            @foreach ($gasStations as $station)
-                {
-                    id: {{ $station->id }},
-                    name: "{{ $station->name }}",
-                    address: "{{ $station->address }}",
-                    phone: "{{ $station->phone }}",
-                    operation_time: "{{ $station->operation_time }}",
-                    image: "{{ asset('storage/' . $station->image) }}",
-                    coords: [{{ $station->latitude }}, {{ $station->longitude }}],
-                    rating: {{ $station->rating ?? 0 }},
-                    reviews: [
-                        @if (!empty($station->reviews))
-                            @foreach ($station->reviews as $review)
-                                {
-                                    name: "{{ $review->user->name ?? 'Ẩn danh' }}",
-                                    rating: {{ $review->rating }},
-                                    comment: "{{ $review->content }}"
-                                }
-                                @if (!$loop->last)
-                                    ,
-                                @endif
-                            @endforeach
-                        @endif
-                    ]
-                }
-                @if (!$loop->last)
-                    ,
+        @foreach ($gasStations as $station)
+        {
+            id: {{ $station->id }},
+            name: {!! json_encode($station->name) !!},
+            address: {!! json_encode($station->address) !!},
+            phone: {!! json_encode($station->phone) !!},
+            operation_time: {!! json_encode($station->operation_time ?? 'Không rõ') !!},
+            image: {!! json_encode(asset('storage/' . $station->image)) !!},
+            coords: [{{ $station->latitude }}, {{ $station->longitude }}],
+            rating: {{ $station->rating ?? 0 }},
+            reviews: [
+                @if (!empty($station->reviews))
+                    @foreach ($station->reviews as $review)
+                        {
+                            name: {!! json_encode($review->user->name ?? 'Ẩn danh') !!},
+                            rating: {{ $review->rating }},
+                            comment: {!! json_encode($review->content) !!}
+                        }@if (!$loop->last),@endif
+                    @endforeach
                 @endif
-            @endforeach
+            ]
+        }@if (!$loop->last),@endif
+        @endforeach
         ];
+        console.log("operation_time: ", location.operation_time);
+        
         const loggedInUserName =
             "{{ Auth::user()->name ?? 'Ẩn danh' }}"; // Lấy tên người dùng hoặc 'Ẩn danh' nếu chưa đăng nhập
 
@@ -268,11 +250,13 @@
             marker.bindPopup(popupContent);
             // Khi click vào marker, cập nhật nội dung cho panel bên trái
             marker.on("click", function() {
+                console.log("Clicked location:", location);
+                console.log("operation_time:", location.operation_time);
                 // Cập nhật thông tin trong panel bên trái
                 document.getElementById("location-image").src = location.image;
                 document.getElementById("location-name").textContent = location.name;
                 document.getElementById("location-address").textContent = location.address;
-                document.getElementById("operation-time").textContent = location.operation_time;
+                document.getElementById("operation-time1").textContent = location.operation_time ?? 'Chưa rõ';
                 document.getElementById("location-phone").textContent = location.phone;
                 document.getElementById("location-distance").textContent = `${location.distance} km`;
                 document.querySelector('.review-popup-title').textContent = location.name;
@@ -502,6 +486,28 @@
             // Log để debug
             console.log('Map initialized:', map);
         });
+    </script>
+    <script>
+        document.getElementById("clear-route-btn").addEventListener("click", function () {
+            if (currentRoute) {
+                map.removeControl(currentRoute);
+                currentRoute = null;
+            }
+            this.style.display = "none"; // Ẩn nút sau khi ẩn tuyến đường
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+            document.getElementById("latitude").value = position.coords.latitude;
+            document.getElementById("longitude").value = position.coords.longitude;
+        }, function (error) {
+            console.warn("Không lấy được vị trí:", error.message);
+        });
+    } else {
+        console.warn("Trình duyệt không hỗ trợ Geolocation.");
+    }
+});
     </script>
 </body>
 

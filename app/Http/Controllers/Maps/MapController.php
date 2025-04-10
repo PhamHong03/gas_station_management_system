@@ -15,7 +15,7 @@ class MapController extends Controller
 
     public function index(Request $request)
     {
-        $gasStations = GasStation::with('reviews')->get();
+        
         $fuelTypes = FuelType::all();
         $operationTimes = GasStation::select('operation_time')
             ->distinct()
@@ -32,12 +32,17 @@ class MapController extends Controller
             return view('clients.layouts.homepage', [
                 'gasStations' => $gasStations,
                 'fuelTypes' => $fuelTypes,
+                'selectedFuelType' => $request->fuel_type, // Thêm giá trị đã chọn
                 'operationTimes' => $operationTimes,
                 'selectedTime' => $request->operation_time // Thêm giá trị đã chọn
             ]);
         }
+        else{
+            $gasStations = GasStation::with('reviews')->get();
+            return view('clients.layouts.homepage', compact('gasStations', 'fuelTypes', 'operationTimes'));
+        }
 
-        return view('clients.layouts.homepage', compact('gasStations', 'fuelTypes', 'operationTimes'));
+       
     }
     protected $gasStationServices;
 
