@@ -28,7 +28,6 @@
                                             <th> Kinh độ </th>
                                             <th> Vĩ độ </th>
                                             <th> Địa chỉ </th>
-                                            <th> Tài khoản </th>
                                             <th> Hành động </th>
                                         </tr>
                                     </thead>
@@ -41,7 +40,7 @@
                                                 <td class="wrap-text"> {{ $company->longitude }} </td>
                                                 <td class="wrap-text"> {{ $company->latitude }} </td>
                                                 <td class="wrap-text"> {{ $company->address }} </td>
-                                                <td class="wrap-text"> {{ $company->user->name }} </td>
+
                                                 <td>
                                                     <a href="{{ route('admin.companies.edit', ['id' => $company->id]) }}"
                                                         class="btn btn-primary">Sửa</a>

@@ -39,7 +39,7 @@
                                             <tr>
                                                 <td class="wrap-text"> {{ $gasStationFuel->fuelType->name }} </td>
                                                 <td>
-                                                    <a href="{{ route('admin.gas-station-fuel.edit', ['id' => $gasStationFuel->id]) }}"
+                                                    <a href="{{ route('admin.gas-station-fuel.edit', ['id' => $gasStation->id, 'id2' => $gasStationFuel->id]) }}"
                                                         class="btn btn-primary">Sửa</a>
                                                     <a href="{{ route('admin.gas-station-fuel.delete', ['id' => $gasStationFuel->id]) }}"
                                                         class="btn btn-danger">Xóa</a>
