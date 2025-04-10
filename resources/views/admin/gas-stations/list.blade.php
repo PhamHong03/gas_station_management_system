@@ -69,6 +69,7 @@
                     </div>
                 </div>
             </div>
+            {!! $gasStations->links() !!}
         </div>
     </div>
     <style>
@@ -81,4 +82,5 @@
             overflow-x: auto;
         }
     </style>
+
 @endsection

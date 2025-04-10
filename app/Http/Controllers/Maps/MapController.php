@@ -3,50 +3,33 @@
 namespace App\Http\Controllers\Maps;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\GasStation;
 use App\Models\FuelType; // Thêm import FuelType model
 use App\Http\Services\GasStationServices;
 use App\Http\Requests\GasStation\GasStationRequest;
+use Illuminate\Http\Request;
 
 class MapController extends Controller
 {
+
+
     public function index(Request $request)
     {
-        // Get all gas stations with their reviews
         $gasStations = GasStation::with('reviews')->get();
-
-        // Get operation times
+        $fuelTypes = FuelType::all();
         $operationTimes = GasStation::select('operation_time')
             ->distinct()
             ->whereNotNull('operation_time')
             ->where('operation_time', '!=', '')
             ->pluck('operation_time');
-
-        // Get all fuel types
-        $fuelTypes = FuelType::all();
-
         if ($request->has('search')) {
             // Validate and process search
             $validatedRequest = app(\App\Http\Requests\GasStation\GasStationRequest::class);
             $gasStations = $this->findNearestGasStations($validatedRequest);
-
-            // Return view with stations, operation times and fuel types
-            return view('clients.layouts.homepage', [
-                'gasStations' => $gasStations,
-                'operationTimes' => $operationTimes,
-                'fuelTypes' => $fuelTypes
-            ]);
+            return view('clients.layouts.homepage', compact('gasStations'));
         }
-
-        // Return view with all data if no search
-        return view('clients.layouts.homepage', [
-            'gasStations' => $gasStations,
-            'operationTimes' => $operationTimes,
-            'fuelTypes' => $fuelTypes
-        ]);
+        return view('clients.layouts.homepage', compact('gasStations', 'fuelTypes', 'operationTimes'));
     }
-
     protected $gasStationServices;
 
     public function __construct(GasStationServices $gasStationServices)

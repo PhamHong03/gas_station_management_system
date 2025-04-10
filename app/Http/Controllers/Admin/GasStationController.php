@@ -17,8 +17,14 @@ class GasStationController extends Controller
     public function __construct(GasStationService $gasStationServer){
         return $this->gasStationServer = $gasStationServer;
     }
+    // public function list(){
+    //     $gasStations= GasStation::all();
+    //     return view('admin.gas-stations.list', compact('gasStations'));
+    // }
     public function list(){
-        $gasStations= GasStation::all();
+
+        // $gasStations= GasStation::all()->paginate(8);
+        $gasStations  = $this->gasStationServer->getAll();
         return view('admin.gas-stations.list', compact('gasStations'));
     }
     public function create(){

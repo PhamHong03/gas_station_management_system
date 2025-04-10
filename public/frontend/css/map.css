@@ -1,9 +1,14 @@
 /* Reset */
 html,
 body {
+    font-family: 'Times New Roman', Times, serif;
     margin: 0;
     padding: 0;
     height: 100%;
+}
+h3{
+    font-family: "Merriweather", serif;
+    font-size: 24px;
 }
 
 /* Bản đồ */
@@ -70,6 +75,29 @@ body {
     color: #6e6e6e;
 }
 
+/* tab */
+.navigation-tabs {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.tab {
+    border: none;
+    background: none;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #333;
+    border-bottom: 2px solid transparent;
+    /* Để có thể thấy hiệu ứng active */
+}
+
+.tab.active {
+    color: blue;
+    border-bottom: 2px solid blue;
+}
 
 /* Panel thông tin bên trái */
 #navigation-form,
@@ -78,7 +106,6 @@ body {
     height: 100vh;
     background: white;
     border-right: 1px solid #ccc;
-    padding: 20px; /* Điều chỉnh padding */
     overflow-y: auto;
     position: fixed;
     top: 0;
@@ -87,12 +114,109 @@ body {
     box-sizing: border-box;
 }
 
+#selectnavigationandnumber {
+    display: flex;
+    gap: 10px;
+    /* Khoảng cách giữa các phần tử */
+    margin-bottom: 15px;
+
+}
+
+#fueltypes-form {
+    flex-grow: 1;
+    /* Cho phép select chiếm không gian còn lại */
+    padding: 12px 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    appearance: none;
+    /* Loại bỏ стили mặc định của trình duyệt */
+    background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 10px top 50%;
+    background-size: 16px;
+    cursor: pointer;
+}
+
+#fueltypes-form:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+#number-location {
+    width: 120px;
+    /* Điều chỉnh chiều rộng mong muốn */
+
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+#number-location:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.find-route-btn-div {
+    width: 100%;
+    text-align: center;
+}
+
+#find-route-btn {
+    background-color: transparent;
+    /* Nền trong suốt */
+    color: #000000;
+    /* Màu chữ xanh dương */
+    border: 1px solid #1a73e8;
+    /* Viền xanh dương */
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-top: 10px;
+}
+
+#find-route-btn:hover {
+    background-color: #e8f0fe;
+    /* Nền nhạt khi hover */
+    color: #000000;
+    /* Màu chữ đậm hơn khi hover */
+}
+
+#find-route-btn::before {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+
+#overview {
+    padding-left: 20px;
+    padding-right: 20px;
+    border-bottom: 1px solid gray;
+}
+
+#reviews-section {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+}
+
+.review-item {
+    border-bottom: 1px solid gray;
+}
+
 #navigation-form {
-    left: -25%;
+    left: -30%;
 }
 
 #info-panel {
-    left: -50%;
+    left: -30%;
     z-index: 2000;
 }
 
@@ -220,36 +344,32 @@ body {
     /* Đảm bảo nó nằm trên bản đồ */
 }
 
-
 .category-btn {
-    padding: 10px 20px;
-    border: none;
-    color: black;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 18px;
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-}
+        background-color: white;
+        /* Nền trong suốt */
+        color: #000000;
+        font-weight: bold;
+        border-radius: 24px;
+        padding: 10px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        margin-bottom: 10px;
+        outline: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        margin-top: 10px;
+    }
 
-.category-btn:hover {
-    background-color: #636363;
-    /* Màu xanh đậm khi hover */
-    transform: scale(1.05);
-    /* Hiệu ứng phóng to nhẹ */
-}
+    .category-btn:hover {
+        background-color: #e8f0fe;
+        /* Nền nhạt khi hover */
+        color: #000000;
+        /* Màu chữ đậm hơn khi hover */
+    }
 
-.category-btn:active {
-    background-color: #525252;
-    /* Màu khi nhấn */
-    transform: scale(0.95);
-}
-
-.category-btn.selected {
-    background-color: #28a745;
-    /* Màu xanh lá khi được chọn */
-}
+    .category-btn::before {
+        margin-right: 8px;
+        font-size: 16px;
+    }
 
 
 
@@ -302,44 +422,7 @@ body {
     font-size: 14px;
 }
 
-/* button chỉ đường */
-#btn-route {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    /* Hiệu ứng gradient xanh dương */
-    color: white;
-    /* Màu chữ trắng */
-    border: none;
-    /* Bỏ viền */
-    border-radius: 8px;
-    /* Bo góc */
-    padding: 10px 20px;
-    /* Kích thước nút */
-    font-size: 16px;
-    /* Cỡ chữ vừa phải */
-    cursor: pointer;
-    /* Hiệu ứng con trỏ */
-    transition: all 0.3s ease-in-out;
-    /* Hiệu ứng hover */
-    display: flex;
-    /* Căn chỉnh icon và text */
-    align-items: center;
-    gap: 8px;
-    /* Khoảng cách giữa icon và chữ */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    /* Đổ bóng nhẹ */
-}
 
-#btn-route:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
-    /* Màu tối hơn khi hover */
-    transform: scale(1.05);
-    /* Hiệu ứng phóng to nhẹ */
-}
-
-#btn-route:active {
-    transform: scale(0.95);
-    /* Nhấn xuống hiệu ứng */
-}
 
 
 /* popup user */
@@ -418,11 +501,6 @@ body {
     margin-bottom: 5px;
 }
 
-.leaflet-routing-alt h3 {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 10px;
-}
 
 .leaflet-routing-alt table {
     width: 100%;
@@ -483,56 +561,33 @@ body {
 }
 
 .popup-item {
-    margin: 10px 0;
-    cursor: pointer;
-    padding: 8px;
+    display: inline-block;
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
     border-radius: 5px;
-    background: #f8f8f8;
-    transition: background 0.2s;
+    background-color: #fff;
+    color: #333;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: box-shadow 0.2s ease-in-out;
 }
 
 .popup-item:hover {
-    background: #ddd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-
-/* button chỉ đường */
-#btn-route {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    /* Hiệu ứng gradient xanh dương */
+.popup-item.primary {
+    background-color: #007bff;
     color: white;
-    /* Màu chữ trắng */
-    border: none;
-    /* Bỏ viền */
-    border-radius: 8px;
-    /* Bo góc */
-    padding: 10px 20px;
-    /* Kích thước nút */
-    font-size: 16px;
-    /* Cỡ chữ vừa phải */
-    cursor: pointer;
-    /* Hiệu ứng con trỏ */
-    transition: all 0.3s ease-in-out;
-    /* Hiệu ứng hover */
-    display: flex;
-    /* Căn chỉnh icon và text */
-    align-items: center;
-    gap: 8px;
-    /* Khoảng cách giữa icon và chữ */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    /* Đổ bóng nhẹ */
 }
 
-#btn-route:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
-    /* Màu tối hơn khi hover */
-    transform: scale(1.05);
-    /* Hiệu ứng phóng to nhẹ */
-}
-
-#btn-route:active {
-    transform: scale(0.95);
-    /* Nhấn xuống hiệu ứng */
+.popup-item.secondary {
+    background-color: #6c757d;
+    color: white;
 }
 
 
@@ -620,7 +675,6 @@ body {
 }
 
 .leaflet-routing-alt h3 {
-    font-size: 14px;
     color: #555;
     margin-bottom: 10px;
 }
@@ -683,18 +737,6 @@ body {
     display: block;
 }
 
-.popup-item {
-    margin: 10px 0;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 5px;
-    background: #f8f8f8;
-    transition: background 0.2s;
-}
-
-.popup-item:hover {
-    background: #ddd;
-}
 
 #navigation-form-custom {
     background: white;
@@ -721,7 +763,7 @@ body {
 #end-location-custom {
     width: 100%;
     padding: 10px;
-    margin-top: 10px;
+    margin-top: 20px;
     border-radius: 5px;
     border: 1px solid #ccc;
 }
@@ -752,58 +794,69 @@ label {
 /* Chinh navigation icon ke ben search */
 
 /* Navigation */
-#navigation-form #nav-close-btn {
+#navigation-form {
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+#nav-close-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
     border: none;
     background: none;
-    font-size: 1.2em;
+    color: #777;
+    font-size: 22px;
     cursor: pointer;
+    outline: none;
 }
 
-#navigation-form input[type="text"],
-#navigation-form select,
-#navigation-form #number-location,
-#navigation-form #find-route-btn { /* Thêm selector cho nút tìm đường */
+#nav-close-btn:hover {
+    color: #333;
+}
+
+#start-location,
+#end-location {
     width: 100%;
+    /* Để trừ đi padding và border */
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    margin-bottom: 15px;
+    /* Khoảng cách giữa các input */
+    border: 1px solid #ccc;
+    /* Viền xám nhạt */
+    border-radius: 5px;
+    /* Bo tròn nhẹ ở góc */
     box-sizing: border-box;
-    font-size: 1em;
+    /* Để padding và border không làm tăng kích thước */
+    font-size: 16px;
+    color: #333;
+    /* Màu chữ */
 }
 
-#navigation-form select {
-    appearance: none;
-    background: url('data:image/svg+xml;utf8,<svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24"><path d="M7 10l5 5 5-5z"/></svg>') no-repeat right 8px center;
-    background-size: 16px;
+#start-location::placeholder,
+#end-location::placeholder {
+    color: #aaa;
+    /* Màu chữ placeholder xám nhạt */
 }
 
-#navigation-form #selectnavigationandnumber {
-    display: flex;
-    flex-direction: column;
+#start-location:focus,
+#end-location:focus {
+    border-color: #007bff;
+    /* Màu viền khi focus (tùy chọn) */
+    outline: none;
+    /* Loại bỏ viền focus mặc định của trình duyệt */
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    /* Hiệu ứng bóng đổ nhẹ khi focus (tùy chọn) */
 }
 
-#navigation-form #find-route-btn {
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-}
-
-#navigation-form #find-route-btn:hover {
-    background-color: #0056b3;
-}
-/* Chinh navigation icon ke ben search */
-
-/* Start Location */
 #start-location {
-    margin-top: 0;
-    /* No margin-top on the first input */
+    margin-top: 30px;
 }
 
-
+/* Chinh navigation icon ke ben search */
 
 #nav-close-btn {
     color: white;
@@ -829,46 +882,6 @@ label {
     background: #cc0000;
     /* Màu đỏ đậm hơn khi hover */
 }
-
-/* button chỉ đường */
-#btn-route {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    /* Hiệu ứng gradient xanh dương */
-    color: white;
-    /* Màu chữ trắng */
-    border: none;
-    /* Bỏ viền */
-    border-radius: 8px;
-    /* Bo góc */
-    padding: 10px 20px;
-    /* Kích thước nút */
-    font-size: 16px;
-    /* Cỡ chữ vừa phải */
-    cursor: pointer;
-    /* Hiệu ứng con trỏ */
-    transition: all 0.3s ease-in-out;
-    /* Hiệu ứng hover */
-    display: flex;
-    /* Căn chỉnh icon và text */
-    align-items: center;
-    gap: 8px;
-    /* Khoảng cách giữa icon và chữ */
-    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-    /* Đổ bóng nhẹ */
-}
-
-#btn-route:hover {
-    background: linear-gradient(135deg, #0056b3, #003f7f);
-    /* Màu tối hơn khi hover */
-    transform: scale(1.05);
-    /* Hiệu ứng phóng to nhẹ */
-}
-
-#btn-route:active {
-    transform: scale(0.95);
-    /* Nhấn xuống hiệu ứng */
-}
-
 
 /* popup user */
 #user-popup {
@@ -953,12 +966,6 @@ label {
     margin-bottom: 5px;
 }
 
-.leaflet-routing-alt h3 {
-    font-size: 14px;
-    color: #555;
-    margin-bottom: 10px;
-}
-
 .leaflet-routing-alt table {
     width: 100%;
     border-collapse: collapse;
@@ -1017,29 +1024,83 @@ label {
     display: block;
 }
 
-.popup-item {
-    margin: 10px 0;
-    cursor: pointer;
-    padding: 8px;
-    border-radius: 5px;
-    background: #f8f8f8;
-    transition: background 0.2s;
-}
-
-.popup-item:hover {
-    background: #ddd;
-}
-
 
 /* Chinh popup hien thi review _ them danh gia */
-#btnOpenReviewPopup {
-    padding: 10px 20px;
-    background-color: #4285f4;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+.button-container {
+    text-align: center;
+    /* Căn giữa nội dung inline/inline-block bên trong */
+    margin-top: 10px;
+    /* Thêm một chút khoảng cách phía trên button (tùy chọn) */
 }
+
+/* button chỉ đường */
+#btn-route {
+    background-color: transparent;
+    /* Nền trong suốt */
+    color: #000000;
+    /* Màu chữ xanh dương */
+    border: 2px solid #1a73e8;
+    /* Viền xanh dương */
+    border-radius: 24px;
+    padding: 10px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin-top: 10px;
+}
+
+#btn-route:hover {
+    background-color: #e8f0fe;
+    /* Nền nhạt khi hover */
+    color: #000000;
+    /* Màu chữ đậm hơn khi hover */
+}
+
+#btn-route::before {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+#btnOpenReviewPopup {
+    background-color: transparent;
+    /* Nền trong suốt */
+    color: #020202;
+    /* Màu chữ xanh dương */
+    border: 2px solid #1a73e8;
+    /* Viền xanh dương */
+    padding: 10px 16px;
+    border-radius: 24px;
+    /* Bo tròn góc */
+
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#btnOpenReviewPopup:hover {
+    background-color: #e8f0fe;
+    /* Màu nền nhạt hơn khi hover */
+    border-color: #1a73e8;
+    /* Viền xanh dương khi hover */
+}
+
+#btnOpenReviewPopup svg {
+    /* Стиль для иконки (если вы используете SVG) */
+    margin-right: 8px;
+    /* Khoảng cách giữa icon và text */
+    width: 20px;
+    /* Kích thước icon */
+}
+
+/* Nếu bạn muốn sử dụng text thay vì icon SVG */
+#btnOpenReviewPopup::before {
+    margin-right: 8px;
+    font-size: 16px;
+}
+
 
 .review-popup {
     display: none;
@@ -1090,11 +1151,13 @@ label {
     font-weight: bold;
 }
 
-.review-rating, .review-textarea {
+.review-rating,
+.review-textarea {
     display: flex;
     justify-content: center;
-    margin-bottom: 15px; /* Giữ nguyên margin-bottom nếu bạn muốn */
-  }
+    margin-bottom: 15px;
+    /* Giữ nguyên margin-bottom nếu bạn muốn */
+}
 
 .review-star {
     font-size: 40px;
