@@ -3,21 +3,51 @@
 namespace App\Http\Controllers\Maps;
 
 use App\Http\Controllers\Controller;
-use App\Models\FuelType;
 use App\Models\GasStation;
+use App\Models\FuelType; // Thêm import FuelType model
+use App\Http\Services\GasStationServices;
+use App\Http\Requests\GasStation\GasStationRequest;
+use Illuminate\Http\Request;
 
 class MapController extends Controller
 {
-    // public function index(){
 
-    //     return view('clients.layouts.homepage');
-    // }
 
-    public function index()
+    public function index(Request $request)
     {
         $gasStations = GasStation::with('reviews')->get();
         $fuelTypes = FuelType::all();
+        $operationTimes = GasStation::select('operation_time')
+            ->distinct()
+            ->whereNotNull('operation_time')
+            ->where('operation_time', '!=', '')
+            ->pluck('operation_time');
 
-        return view('clients.layouts.homepage', compact('gasStations', 'fuelTypes'));
+        if ($request->has('search')) {
+            // Validate and process search
+            $validatedRequest = app(\App\Http\Requests\GasStation\GasStationRequest::class);
+            $gasStations = $this->findNearestGasStations($validatedRequest);
+            
+            // Trả về view với các giá trị đã chọn
+            return view('clients.layouts.homepage', [
+                'gasStations' => $gasStations,
+                'fuelTypes' => $fuelTypes,
+                'operationTimes' => $operationTimes,
+                'selectedTime' => $request->operation_time // Thêm giá trị đã chọn
+            ]);
+        }
+
+        return view('clients.layouts.homepage', compact('gasStations', 'fuelTypes', 'operationTimes'));
+    }
+    protected $gasStationServices;
+
+    public function __construct(GasStationServices $gasStationServices)
+    {
+        $this->gasStationServices = $gasStationServices;
+    }
+
+    public function findNearestGasStations(GasStationRequest $request)
+    {
+        return $this->gasStationServices->findNear($request);
     }
 }

@@ -4,48 +4,58 @@ namespace App\Http\Services;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
+use App\Http\Requests\GasStation\GasStationRequest;
+use App\Models\GasStation;
+use App\Models\GasStationFuel;
 
-class GasStationServices{
-    public function findNear() {
-        // $request->validate([
-        //     'latitude' => 'required|numeric',
-        //     'longitude' => 'required|numeric',
-        //     'radius' => 'nullable|numeric|min:0' // Bán kính tìm kiếm (km), mặc định 5km
-        // ]);
 
-        $latitude = 10.046516764552752;
-        $longitude = 105.77850438052799;
-        $radius = 5; // Bán kính mặc định là 5km
+class GasStationServices
+{
+    public function findNear(GasStationRequest $request)
+    {
+        $validatedData = $request->validated();
+        $latitude = $validatedData['latitude'];
+        $longitude = $validatedData['longitude'];
+        $radius = ($validatedData['radius'] ?? 5) * 1000;
+        $fuelType = $validatedData['fuel_type'] ?? null;
+        $operationTime = $validatedData['operation_time'] ?? null;
+
+        $stations = GasStation::with(['reviews', 'gasStationFuel']);
+
+        if ($fuelType) {
+            $stations = $stations->whereHas('gasStationFuel', function($query) use ($fuelType) {
+                $query->where('FuelTypeId', $fuelType);
+            });
+        }
+
+        if ($operationTime) {
+            $stations = $stations->where('operation_time', $operationTime);
+        }
+
+        $stations = $stations->get();
+
+        $nearbyStations = [];
+
+        foreach ($stations as $index => $station) {
+            $url = "https://router.project-osrm.org/route/v1/driving/{$longitude},{$latitude};{$station->longitude},{$station->latitude}?overview=false";
         
-        $gasStations = DB::table('gas_stations')
-            ->selectRaw("
-            id, name, address, phone, longitude, latitude,
-            (6371 * acos(cos(radians(?)) * cos(radians(latitude)) 
-            * cos(radians(longitude) - radians(?)) + sin(radians(?)) 
-            * sin(radians(latitude)))) AS distance
-        ", [$latitude, $longitude, $latitude])
-            ->having('distance', '<=', $radius)
-            ->orderBy('distance', 'asc')
-            ->get();
-
-
-        echo ($gasStations);
-        return response()->json($gasStations, 200, [], JSON_UNESCAPED_UNICODE);
-
-    }
-    public function findNearByRadius() {
-
-        $query = '
-        [out:json];
-        way(around:500, 10.776, 106.700)["highway"];
-        (._;>;);
-        out;
-        ';
+            try {
+                $response = Http::get($url);
+                $data = $response->json();
         
-        $response = Http::withHeaders(['Content-Type' => 'application/x-www-form-urlencoded'])
-                        ->post('https://overpass-api.de/api/interpreter', $query);
+                if (!empty($data['routes'][0])) {
+                    $drivingDistance = $data['routes'][0]['distance'];
         
-       return $response->json();
-        
+                    if ($drivingDistance <= $radius) {
+                        $nearbyStations[] = $station;
+                    }
+                }
+            } catch (\Exception $e) {
+                \Log::error("Error fetching distance for station {$station->id}: " . $e->getMessage());
+                continue;
+            }
+        }
+
+        return $nearbyStations;
     }
 }
