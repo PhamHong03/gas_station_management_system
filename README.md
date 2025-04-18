@@ -36,7 +36,7 @@ composer install
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=gas_statioN1(1)
+DB_DATABASE=gas_station1(1)
 DB_USERNAME=root
 DB_PASSWORD=
 
